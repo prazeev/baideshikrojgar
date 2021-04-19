@@ -58,12 +58,15 @@ class _CategoryDataSajhasabalState extends State<CategoryDataSajhasabal> {
         page = page + 1;
       });
     } else {
+      String url = page == 1
+          ? SAJHASABAL_URL + 'api/fetchPostsByCategories/' + category
+          : SAJHASABAL_URL +
+              'api/fetchPostsByCategories/' +
+              category +
+              '?per_page=' +
+              page.toString();
       dynamic res = await this.mainController.apiController.getDataFuture(
-            SAJHASABAL_URL +
-                'api/fetchPostsByCategories/' +
-                category +
-                '?per_page=' +
-                page.toString(),
+            url,
             externalurl: true,
           );
       if (first) {

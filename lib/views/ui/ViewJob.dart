@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:baideshikrojgar/controller/MainController.dart';
 import 'package:baideshikrojgar/utlis/constants/Constants.dart';
 import 'package:baideshikrojgar/utlis/global/Helper.dart';
+import 'package:baideshikrojgar/utlis/global/shimmer.dart';
 import 'package:baideshikrojgar/utlis/global/textView.dart';
 import 'package:baideshikrojgar/views/fragements/jobTile.dart';
 import 'package:baideshikrojgar/views/ui/LTWorkPermitSearch.dart';
@@ -28,6 +29,7 @@ class _ViewJobState extends State<ViewJob> {
   MainController mainController = Get.find();
   String title = "View Post";
   bool isError = false;
+  bool isLoading = true;
   @override
   void initState() {
     super.initState();
@@ -35,6 +37,9 @@ class _ViewJobState extends State<ViewJob> {
   }
 
   fetchJob(int id) async {
+    setState(() {
+      isLoading = true;
+    });
     dynamic res = await this
         .mainController
         .apiController
@@ -50,10 +55,23 @@ class _ViewJobState extends State<ViewJob> {
         data = d['data'];
       });
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text("Fetching..."),
+        ),
+        body: SimmerLoading(
+          loadingCount: 30,
+        ),
+      );
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       floatingActionButton:
@@ -90,14 +108,40 @@ class _ViewJobState extends State<ViewJob> {
             pinned: true,
             actions: [
               IconButton(
-                  icon: Icon(
-                    Icons.share,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {}),
+                icon: Icon(
+                  Icons.share,
+                  color: Colors.white,
+                ),
+                onPressed: () {},
+              ),
+              data['is_subscribed']
+                  ? IconButton(
+                      icon: Icon(
+                        Icons.star,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        this.mainController.unsubscribeModel("job", data['id']);
+                        setState(() {
+                          data['is_subscribed'] = !data['is_subscribed'];
+                        });
+                      },
+                    )
+                  : IconButton(
+                      icon: Icon(
+                        Icons.star_border_outlined,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        this.mainController.subscribeModel("job", data['id']);
+                        setState(() {
+                          data['is_subscribed'] = !data['is_subscribed'];
+                        });
+                      },
+                    ),
             ],
             backgroundColor: Theme.of(context).primaryColor,
-            expandedHeight: 250.00,
+            expandedHeight: 190.00,
             flexibleSpace: getFlexibleAppBar(),
           ),
           SliverList(
@@ -153,6 +197,9 @@ class _ViewJobState extends State<ViewJob> {
               Container(
                 // color: Theme.of(context).primaryColor.withOpacity(0.08),
                 child: getContactDetails(),
+              ),
+              SizedBox(
+                height: 40,
               ),
             ]),
           ),
@@ -652,16 +699,16 @@ class _ViewJobState extends State<ViewJob> {
   Widget getFlexibleAppBar() {
     return FlexibleSpaceBar(
       background: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: CachedNetworkImageProvider(
-              getImageFromString(
-                data['description_en'],
-              ),
-            ),
-            fit: BoxFit.cover,
-          ),
-        ),
+        // decoration: BoxDecoration(
+        //   image: DecorationImage(
+        //     image: CachedNetworkImageProvider(
+        //       getImageFromString(
+        //         data['description_en'],
+        //       ),
+        //     ),
+        //     fit: BoxFit.cover,
+        //   ),
+        // ),
         child: Container(
           padding: EdgeInsets.only(
             top: MediaQuery.of(context).padding.top,

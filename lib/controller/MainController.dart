@@ -236,6 +236,35 @@ class MainController extends GetxController {
     }
   }
 
+  subscribeModel(String model, int modelid) async {
+    var res = await this.apiController.getDataFuture('subscription_system/' +
+        model +
+        '/' +
+        modelid.toString() +
+        '/subscribe');
+    dynamic data = json.decode(res.body);
+    print(data);
+    return data;
+  }
+
+  unsubscribeModel(String model, int modelid) async {
+    var res = await this.apiController.getDataFuture('subscription_system/' +
+        model +
+        '/' +
+        modelid.toString() +
+        '/unsubscribe');
+    dynamic data = json.decode(res.body);
+    print(data);
+    return data;
+  }
+
+  toggleSubscriptionModel(String model, int modelid) async {
+    var res = await this.apiController.getDataFuture(
+        'subscription_system/' + model + '/' + modelid.toString() + '/toggle');
+    dynamic data = json.decode(res.body);
+    return data;
+  }
+
   fetchAllDatasNonPaginated({
     String path = '',
   }) async {

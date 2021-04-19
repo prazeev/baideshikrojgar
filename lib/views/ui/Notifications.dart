@@ -23,9 +23,11 @@ class _NotificationsState extends State<Notifications>
   TabController _controller;
   ScrollController scrollControllerNotifications = ScrollController();
   ScrollController scrollControllerApplications = ScrollController();
+  ScrollController scrollControllerSubscriptions = ScrollController();
 
   List notifications = [];
   List applications = [];
+  List subscriptions = [];
   int _selectedIndex = 0;
   @override
   void initState() {
@@ -38,6 +40,7 @@ class _NotificationsState extends State<Notifications>
     });
     this.getAllNotifications(first: true);
     this.getAllApplications(first: true);
+    this.getAllSubscriptions(first: true);
     super.initState();
 
     scrollControllerNotifications
@@ -52,6 +55,13 @@ class _NotificationsState extends State<Notifications>
         if (scrollControllerApplications.position.pixels ==
             scrollControllerApplications.position.maxScrollExtent) {
           this.getAllApplications();
+        }
+      });
+    scrollControllerSubscriptions
+      ..addListener(() {
+        if (scrollControllerSubscriptions.position.pixels ==
+            scrollControllerSubscriptions.position.maxScrollExtent) {
+          this.getAllSubscriptions();
         }
       });
   }
@@ -85,6 +95,22 @@ class _NotificationsState extends State<Notifications>
     }
     setState(() {
       applications = [...applications, ...data];
+    });
+  }
+
+  getAllSubscriptions({bool first = false}) async {
+    dynamic data = await this.mainController.fetchAllDatas(
+          key: 'manpowers',
+          first: first,
+          path: first ? 'subscriptions' : '',
+        );
+    if (first) {
+      setState(() {
+        subscriptions = [];
+      });
+    }
+    setState(() {
+      subscriptions = [...subscriptions, ...data];
     });
   }
 
@@ -154,10 +180,59 @@ class _NotificationsState extends State<Notifications>
         children: [
           getNotifications(),
           getApplications(),
-          Icon(Icons.directions_transit),
+          getSubscriptions(),
         ],
       ),
     );
+  }
+
+  getSubscriptions() {
+    if (subscriptions.length == 0) {
+      return Center(
+        child: Text('No saved item in system.'),
+      );
+    }
+    return ListView.separated(
+      itemCount: this.subscriptions.length,
+      controller: scrollControllerSubscriptions,
+      itemBuilder: (BuildContext context, int i) {
+        return subscriptionBuilder(subscriptions[i]);
+      },
+      separatorBuilder: (BuildContext context, int i) {
+        return Divider(
+          height: 1,
+        );
+      },
+    );
+  }
+
+  subscriptionBuilder(dynamic data) {
+    switch (data['subscribable_type']) {
+      case 'App\\Jobs':
+        return JobTile(
+          jobId: data['model']['id'],
+          type: 'job',
+          height: 100,
+          picture: getFirstImage(data['model']['images']),
+          title: data['model']['title_en'],
+          salarymax: data['model']['salary_max'].toString(),
+          salarymin: data['model']['salary_min'].toString(),
+          location: data['model']['company_name_en'],
+        );
+      case 'App\\Manpower':
+        return JobTile(
+          jobId: data['model']['id'],
+          type: 'manpower',
+          height: 100,
+          picture: getFirstImage(data['model']['logo']),
+          title: data['model']['name'],
+          location: data['model']['address'],
+          contact: data['model']['contact'],
+          canCall: true,
+        );
+      default:
+        return Text(data['subscribable_type']);
+    }
   }
 
   getApplications() {

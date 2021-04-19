@@ -1,4 +1,5 @@
 import 'package:baideshikrojgar/controller/MainController.dart';
+import 'package:baideshikrojgar/utlis/constants/Constants.dart';
 import 'package:baideshikrojgar/utlis/global/Helper.dart';
 import 'package:baideshikrojgar/utlis/global/textView.dart';
 import 'package:baideshikrojgar/utlis/global/textformfield.dart';
@@ -127,7 +128,8 @@ class _AllJobsState extends State<AllJobs> {
 
   _buildList(dynamic item) {
     return JobTile(
-      height: 90,
+      height: 100,
+      jobId: item['id'],
       picture: getFirstImage(item['images']),
       title: item['title_en'],
       salarymax: item['salary_max'],
@@ -138,79 +140,84 @@ class _AllJobsState extends State<AllJobs> {
   }
 
   _buildGrid(dynamic item) {
-    return Stack(
-      children: [
-        Column(
-          children: [
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: CachedNetworkImage(
-                    imageUrl: getFirstImage(item['images']),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: TextFormatted(
-                    text: item['title_en'],
-                    maxline: 5,
-                    textStyle: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 13,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Expanded(
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.money,
-                    color: Colors.green,
-                    size: 11,
-                  ),
-                  TextFormatted(
-                    text: " Salary (Nrs): ",
-                    textStyle: TextStyle(
-                      fontWeight: FontWeight.w300,
-                      fontSize: 11,
-                    ),
-                  ),
-                  TextFormatted(
-                    text: item['salary_min'] + ' - ' + item['salary_max'],
-                    textStyle: TextStyle(
-                      fontWeight: FontWeight.w300,
-                      fontSize: 11,
+    return InkWell(
+      onTap: () {
+        Get.toNamed(VIEW_JOB, arguments: item['id']);
+      },
+      child: Stack(
+        children: [
+          Column(
+            children: [
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: CachedNetworkImage(
+                      imageUrl: getFirstImage(item['images']),
                     ),
                   ),
                 ],
               ),
-            ),
-          ],
-        ),
-        Positioned(
-          right: 0,
-          child: Container(
-            color: getTimeFormatted(item['expires_on'],
-                    jsontype: true)['isCommingSoon']
-                ? Colors.red
-                : Theme.of(context).primaryColor,
-            child: Center(
-              child: TextFormatted(
-                text: getTimeFormatted(item['expires_on']),
-                textStyle: TextStyle(color: Colors.white, fontSize: 10),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: TextFormatted(
+                      text: item['title_en'],
+                      maxline: 5,
+                      textStyle: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Expanded(
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.money,
+                      color: Colors.green,
+                      size: 11,
+                    ),
+                    TextFormatted(
+                      text: " Salary (Nrs): ",
+                      textStyle: TextStyle(
+                        fontWeight: FontWeight.w300,
+                        fontSize: 11,
+                      ),
+                    ),
+                    TextFormatted(
+                      text: item['salary_min'] + ' - ' + item['salary_max'],
+                      textStyle: TextStyle(
+                        fontWeight: FontWeight.w300,
+                        fontSize: 11,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Positioned(
+            right: 0,
+            child: Container(
+              color: getTimeFormatted(item['expires_on'],
+                      jsontype: true)['isCommingSoon']
+                  ? Colors.red
+                  : Theme.of(context).primaryColor,
+              child: Center(
+                child: TextFormatted(
+                  text: getTimeFormatted(item['expires_on']),
+                  textStyle: TextStyle(color: Colors.white, fontSize: 10),
+                ),
               ),
             ),
-          ),
-          height: 20,
-          width: 100,
-        )
-      ],
+            height: 20,
+            width: 100,
+          )
+        ],
+      ),
     );
   }
 }

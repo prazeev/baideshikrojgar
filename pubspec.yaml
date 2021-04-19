@@ -50,8 +50,17 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_name: "^0.0.1"
+  flutter_launcher_icons: "^0.7.3"
+flutter_launcher_name:
+  name: "Baideshik Rojgar"
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/logo.png"
   integration_test:
     sdk: flutter
+
 
 flutter:
   uses-material-design: true

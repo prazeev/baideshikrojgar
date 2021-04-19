@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:baideshikrojgar/controller/MainController.dart';
 import 'package:baideshikrojgar/utlis/global/Helper.dart';
+import 'package:baideshikrojgar/utlis/global/shimmer.dart';
 import 'package:baideshikrojgar/utlis/global/textView.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -18,6 +19,7 @@ class _ViewPostState extends State<ViewPost> {
   MainController mainController = Get.find();
   String title = "View Post";
   Map data = {"title_np": "", "description_np": ""};
+  bool isLoading = true;
   @override
   void initState() {
     super.initState();
@@ -25,19 +27,32 @@ class _ViewPostState extends State<ViewPost> {
   }
 
   fetchPost(int id) async {
+    setState(() {
+      isLoading = true;
+    });
     dynamic res = await this
         .mainController
         .apiController
         .getDataFuture('view_post/' + id.toString());
     var d = json.decode(res.body);
-    print(d);
     setState(() {
       data = d;
+      isLoading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text("Fetching..."),
+        ),
+        body: SimmerLoading(
+          loadingCount: 30,
+        ),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: TextFormatted(

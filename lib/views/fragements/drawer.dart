@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:baideshikrojgar/controller/MainController.dart';
 import 'package:baideshikrojgar/utlis/constants/Constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,6 +17,7 @@ class MainDrawer extends StatefulWidget {
 class _MainDrawerState extends State<MainDrawer> {
   String versionName = '';
   String versionCode = '';
+  MainController mainController = Get.find();
   @override
   void initState() {
     super.initState();
@@ -37,8 +39,8 @@ class _MainDrawerState extends State<MainDrawer> {
             child: ListView(
               children: [
                 UserAccountsDrawerHeader(
-                  accountName: Text("Bashudev Paudel"),
-                  accountEmail: Text("prazeev@gmail.com"),
+                  accountName: Text(mainController.user.name),
+                  accountEmail: Text(mainController.user.email),
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage('assets/images/side.png'),

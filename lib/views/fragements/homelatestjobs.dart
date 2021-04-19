@@ -44,8 +44,8 @@ class _HomeLatestJobsState extends State<HomeLatestJobs> {
               TextFormatted(
                 text: "Latest Jobs",
               ),
-              RaisedButton(
-                child: ViewAllButton(),
+              FlatButton(
+                child: Text('View all'),
                 onPressed: () => Get.toNamed(ALL_JOBS),
               )
             ],

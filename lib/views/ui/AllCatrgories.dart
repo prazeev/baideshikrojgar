@@ -130,8 +130,8 @@ class _AllCatrgoriesState extends State<AllCatrgories> {
     return JobTile(
       jobId: item['slug'],
       type: 'categories',
-      isBigImage: true,
       title: item['title_en'],
+      smallpicture: getFirstImage(item['images']),
       abstract: item['abstract_en'],
       jobCount: item['active_jobs_count'],
     );

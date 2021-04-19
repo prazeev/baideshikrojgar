@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class JobTile extends StatefulWidget {
   final String picture,
+      smallpicture,
       title,
       salarymin,
       salarymax,
@@ -22,6 +23,7 @@ class JobTile extends StatefulWidget {
   final double height, fontSize;
   JobTile({
     this.picture = '',
+    this.smallpicture = '',
     this.title = '',
     this.salarymax = '',
     this.salarymin = '',
@@ -97,6 +99,28 @@ class _JobTileState extends State<JobTile> {
                         imageBuilder: (context, imageProvider) => Container(
                           height: this.widget.isBigImage ? 100 : 80,
                           width: this.widget.isBigImage ? 100 : 80,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        ),
+                        placeholder: (context, url) =>
+                            CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                        // fit: BoxFit.cover,
+                      )
+                    : SizedBox(
+                        height: 1,
+                      ),
+                this.widget.smallpicture != ''
+                    ? CachedNetworkImage(
+                        imageUrl: this.widget.smallpicture,
+                        height: 40,
+                        width: 40,
+                        imageBuilder: (context, imageProvider) => Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
                             image: DecorationImage(

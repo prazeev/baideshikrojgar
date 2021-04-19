@@ -126,8 +126,8 @@ class _DirectoryListState extends State<DirectoryList> {
       return JobTile(
         height: 90,
         // jobId: item['slug'],
-        // type: 'html',
-        // html: item['description_np'],
+        type: 'html',
+        html: item['description_np'],
         picture: getFirstImage(item['images']),
         // bigTitle: true,
         // isBigImage: true,
