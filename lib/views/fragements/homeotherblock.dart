@@ -37,19 +37,50 @@ class HomeOtherMenuTile extends StatelessWidget {
   final dynamic tile;
   @override
   Widget build(BuildContext context) {
-    return CircleAvatar(
-      radius: 40,
-      backgroundImage: AssetImage(
-        this.tile['path'],
+    return GestureDetector(
+      onTap: () {
+        Get.toNamed(DIRECTORY_LISTING, arguments: {
+          "title": this.tile['title'] ?? "TITLE",
+          "id": this.tile['key'],
+        });
+      },
+      child: CircleAvatar(
+        radius: 40,
+        backgroundImage: AssetImage(
+          this.tile['path'],
+        ),
       ),
     );
   }
 }
 
 class HomeManpowerEmbassy extends StatelessWidget {
-  final MainController mainController = Get.find();
+  final List manpowers, embassies;
+  HomeManpowerEmbassy({this.manpowers, this.embassies});
   @override
   Widget build(BuildContext context) {
+    List<Widget> allmanpowers = [];
+    allmanpowers = this.manpowers.map((tile) {
+      return JobTile(
+        height: 90,
+        divider: true,
+        picture: tile['picture'],
+        title: tile['title'],
+        abstract: tile['abstract'],
+        jobCount: tile['newjob'],
+      );
+    }).toList();
+    List<Widget> allembassies = [];
+    allembassies = this.embassies.map((tile) {
+      return JobTile(
+        divider: true,
+        height: 90,
+        picture: tile['picture'],
+        title: tile['title'],
+        location: tile['location'],
+        contact: tile['contact'],
+      );
+    }).toList();
     return Container(
       child: DefaultTabController(
         length: 2,
@@ -69,97 +100,53 @@ class HomeManpowerEmbassy extends StatelessWidget {
                 ],
               ),
             ),
-            Container(
-              height:
-                  this.mainController.homeManpowers.length * JOB_TILE_HEIGHT +
-                      JOB_TILE_HEIGHT +
-                      (this.mainController.homeManpowers.length * 1.5),
+            SizedBox(
+              height: (this.embassies.length > this.manpowers.length
+                          ? this.embassies.length
+                          : this.manpowers.length) *
+                      90 +
+                  JOB_TILE_HEIGHT,
               child: TabBarView(
                 children: [
-                  ListView.separated(
-                    itemBuilder: (BuildContext context, int i) {
-                      dynamic tile = this.mainController.homeManpowers[i];
-                      if (i == this.mainController.homeManpowers.length - 1) {
-                        return Column(
-                          children: [
-                            JobTile(
-                              picture: tile['picture'],
-                              title: tile['title'],
-                              location: tile['location'],
-                              contact: tile['contact'],
-                              jobCount: 5,
-                            ),
-                            NiceButton(
-                              onPressed: () {},
-                              text: 'View all',
-                              elevation: 0,
-                              padding: EdgeInsets.only(
-                                top: 8,
-                                bottom: 8,
-                              ),
-                              fontSize: 14,
-                              width: double.infinity,
-                              background: Theme.of(context).primaryColor,
-                            ),
-                          ],
-                        );
-                      }
-                      return JobTile(
-                        picture: tile['picture'],
-                        title: tile['title'],
-                        location: tile['location'],
-                        contact: tile['contact'],
-                        jobCount: 5,
-                      );
-                    },
-                    separatorBuilder: (BuildContext context, int i) {
-                      return Divider(
-                        height: 1.5,
-                      );
-                    },
-                    itemCount: this.mainController.homeManpowers.length,
+                  Container(
+                    color: Colors.white,
+                    child: Column(
+                      children: [
+                        ...allmanpowers,
+                        Expanded(
+                          child: NiceButton(
+                            onPressed: () {
+                              Get.toNamed(ALL_MANPOWER);
+                            },
+                            text: "View All",
+                            fontSize: 12,
+                            background: Theme.of(context).primaryColor,
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                  ListView.separated(
-                    itemBuilder: (BuildContext context, int i) {
-                      dynamic tile = this.mainController.homeEmbassies[i];
-                      if (i == this.mainController.homeEmbassies.length - 1) {
-                        return Column(
-                          children: [
-                            JobTile(
-                              picture: tile['picture'],
-                              title: tile['title'],
-                              location: tile['location'],
-                              contact: tile['contact'],
-                            ),
-                            NiceButton(
-                              onPressed: () {},
-                              text: 'View all',
-                              elevation: 0,
-                              padding: EdgeInsets.only(
-                                top: 8,
-                                bottom: 8,
-                              ),
-                              fontSize: 14,
-                              width: double.infinity,
-                              background: Theme.of(context).primaryColor,
-                            ),
-                          ],
-                        );
-                      }
-                      return JobTile(
-                        picture: tile['picture'],
-                        title: tile['title'],
-                        location: tile['location'],
-                        contact: tile['contact'],
-                      );
-                    },
-                    separatorBuilder: (BuildContext context, int i) {
-                      return Divider(
-                        height: 1.5,
-                      );
-                    },
-                    itemCount: this.mainController.homeEmbassies.length,
-                  ),
+                  Container(
+                    color: Colors.white,
+                    child: Column(
+                      children: [
+                        ...allembassies,
+                        Expanded(
+                          child: NiceButton(
+                            onPressed: () {
+                              Get.toNamed(DIRECTORY_LISTING, arguments: {
+                                'title': 'Embassy List',
+                                'id': 5
+                              });
+                            },
+                            text: "View All",
+                            fontSize: 12,
+                            background: Theme.of(context).primaryColor,
+                          ),
+                        )
+                      ],
+                    ),
+                  )
                 ],
               ),
             )
@@ -180,94 +167,106 @@ class HomeLTWorkPermit extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
-            child: Container(
-              margin: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.white,
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.volume_up,
+            child: GestureDetector(
+              onTap: () {
+                Get.toNamed(LT_WORKPERMIT_SEARCH,
+                    arguments: {"type": LT_SEARCH, "data": ""});
+              },
+              child: Container(
+                margin: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  border: Border.all(
                     color: Colors.white,
-                    size: 40,
                   ),
-                  Container(
-                    padding: const EdgeInsets.only(
-                      left: 5,
-                      right: 5,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.volume_up,
+                      color: Colors.white,
+                      size: 40,
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TextFormatted(
-                          text: "LT Number",
-                          textStyle: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                    Container(
+                      padding: const EdgeInsets.only(
+                        left: 5,
+                        right: 5,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextFormatted(
+                            text: "LT Number",
+                            textStyle: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        TextFormatted(
-                          text: "विज्ञापन पूर्व-स्वीकृति",
-                          textStyle: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.normal,
+                          TextFormatted(
+                            text: "विज्ञापन पूर्व-स्वीकृति",
+                            textStyle: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.normal,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
           Expanded(
-            child: Container(
-              margin: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.white,
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.contact_page_outlined,
+            child: GestureDetector(
+              onTap: () {
+                Get.toNamed(LT_WORKPERMIT_SEARCH,
+                    arguments: {"type": PASSPORT_NO_SEARCH, "data": ""});
+              },
+              child: Container(
+                margin: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  border: Border.all(
                     color: Colors.white,
-                    size: 40,
                   ),
-                  Container(
-                    padding: const EdgeInsets.only(
-                      left: 5,
-                      right: 5,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.contact_page_outlined,
+                      color: Colors.white,
+                      size: 40,
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TextFormatted(
-                          text: "Work Permit",
-                          textStyle: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                    Container(
+                      padding: const EdgeInsets.only(
+                        left: 5,
+                        right: 5,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextFormatted(
+                            text: "Work Permit",
+                            textStyle: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        TextFormatted(
-                          text: "श्रम स्वीकृति",
-                          textStyle: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.normal,
+                          TextFormatted(
+                            text: "श्रम स्वीकृति",
+                            textStyle: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.normal,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           )

@@ -1,13 +1,22 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:baideshikrojgar/controller/LoginController.dart';
+import 'package:baideshikrojgar/models/User.dart';
+import 'package:baideshikrojgar/utlis/constants/Constants.dart';
 import 'package:baideshikrojgar/utlis/global/custom_shape.dart';
 import 'package:baideshikrojgar/utlis/global/responsive_ui.dart';
 import 'package:baideshikrojgar/utlis/global/textView.dart';
 import 'package:baideshikrojgar/utlis/global/textformfield.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -38,23 +47,70 @@ class _SignInScreenState extends State<SignInScreen> {
   double _pixelRatio;
   bool _large;
   bool _medium;
-  bool _loggingIn = false, loggedIn = false;
+  int _current = 0;
+  bool _loggingInFacebook = false, _loggingInGoogle = false, loggedIn = false;
   LoginController loginController = Get.find();
   GlobalKey<FormState> _key = GlobalKey();
-  bool _rememberMe = true;
   bool hasSeenIntro = false;
-
+  List loginSliderItems = [
+    {
+      "image": {
+        "data": "assets/images/log 1.png",
+        "type": "assets",
+      },
+      "text":
+          "वैधानिक बाटोबाट वैदेशिक रोजगारमा जानुहोस्, देशको विकासमा योगदान गर्नुहोस् "
+    },
+    {
+      "image": {
+        "data": "assets/images/log 2.png",
+        "type": "assets",
+      },
+      "text":
+          "वैदेशिक रोजगारमा पठाउने म्यानपावर एजेन्सीहरुसँग सहजै जोडिनुहोस्, रोजगारको प्रक्रिया सुरु गर्नुहोस्"
+    },
+    {
+      "image": {
+        "data": "assets/images/log 3.png",
+        "type": "assets",
+      },
+      "text":
+          "स्वदेशमा रहँदा देखि वैदेशिक रोजगारबाट फर्कँदाका सबै तथ्यपूर्ण सूचनाहरु एकै एपमा पाईराख्नुहोस्"
+    },
+    {
+      "image": {
+        "data": "assets/images/log 4.png",
+        "type": "assets",
+      },
+      "text":
+          "वैदेशिक रोजगार सम्बन्धि सम्पूर्ण जानकारीहरु पाउनुहोस्, रोजगारदाता खोज्नुहोस, कामदार खोज्नुहोस् "
+    },
+    {
+      "image": {
+        "data": "assets/images/log 5.png",
+        "type": "assets",
+      },
+      "text":
+          "मोबाइल एपबाट वैदेशिक रोजगारको सम्पूर्ण जानकारी लिनुहोस्, गुनाशो गर्नुहोस्, समाचारहरु पढ्नुहोस् "
+    },
+  ];
+  bool skipLogin = true;
   @override
   void initState() {
     super.initState();
-  }
-
-  setLogginIn(bool isLoggingIn) {
-    this._loggingIn = isLoggingIn;
-  }
-
-  setLoggedIn(bool isLoggedIn) {
-    this.loggedIn = isLoggedIn;
+    EasyLoading.instance
+      ..displayDuration = const Duration(milliseconds: 2000)
+      ..indicatorType = EasyLoadingIndicatorType.fadingCircle
+      ..loadingStyle = EasyLoadingStyle.dark
+      ..indicatorSize = 45.0
+      ..radius = 10.0
+      ..progressColor = Colors.yellow
+      ..backgroundColor = Colors.green
+      ..indicatorColor = Colors.yellow
+      ..textColor = Colors.yellow
+      ..maskColor = Colors.blue.withOpacity(0.5)
+      ..userInteractions = true
+      ..dismissOnTap = false;
   }
 
   @override
@@ -64,33 +120,124 @@ class _SignInScreenState extends State<SignInScreen> {
     _pixelRatio = MediaQuery.of(context).devicePixelRatio;
     _large = ResponsiveWidget.isScreenLarge(_width, _pixelRatio);
     _medium = ResponsiveWidget.isScreenMedium(_width, _pixelRatio);
+    final double statusBarHeight = MediaQuery.of(context).padding.top;
     return Material(
       child: Container(
         height: _height,
         width: _width,
         padding: EdgeInsets.only(bottom: 5),
         decoration: BoxDecoration(
-          color: Colors.orange[200],
+          color: Colors.white,
         ),
         child: ClipRect(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(
-              sigmaX: 30,
-              sigmaY: 30,
-            ),
-            child: SingleChildScrollView(
+          child: SingleChildScrollView(
+            child: Container(
               child: Column(
                 children: <Widget>[
                   clipShape(),
-                  welcomeTextRow(),
-                  signInTextRow(),
-                  form(),
-                  // forgetPassTextRow(),
-                  SizedBox(
-                    height: _height / 50,
+                  CarouselSlider.builder(
+                    itemCount: loginSliderItems.length,
+                    itemBuilder: (BuildContext context, int itemIndex, int i) {
+                      dynamic item = loginSliderItems[itemIndex];
+                      return Container(
+                        child: Column(
+                          children: [
+                            item['image']['type'] == 'assets'
+                                ? Image(
+                                    image: AssetImage(item['image']['data']),
+                                    height: 120,
+                                  )
+                                : CachedNetworkImage(
+                                    imageUrl: item['image']['data'],
+                                    height: 120,
+                                  ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            TextFormatted(
+                              text: item['text'],
+                              textStyle: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    options: CarouselOptions(
+                        height: 400,
+                        autoPlay: true,
+                        autoPlayInterval: Duration(seconds: 3),
+                        autoPlayAnimationDuration: Duration(milliseconds: 800),
+                        autoPlayCurve: Curves.fastOutSlowIn,
+                        scrollDirection: Axis.horizontal,
+                        viewportFraction: 1.0,
+                        enlargeCenterPage: false,
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            _current = index;
+                          });
+                        }),
                   ),
-                  button(),
-                  signUpTextRow(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: loginSliderItems.map((item) {
+                      int index = loginSliderItems.indexOf(item);
+                      return Container(
+                        width: _current == index ? 12.0 : 8.0,
+                        height: _current == index ? 12.0 : 8.0,
+                        margin: EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 2.0),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: _current == index
+                              ? Theme.of(context).primaryColor
+                              : Theme.of(context).secondaryHeaderColor,
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                  _loggingInFacebook
+                      ? SignInButton(
+                          Buttons.Facebook,
+                          text: "Signing in process...",
+                          onPressed: () async {},
+                        )
+                      : SignInButton(
+                          Buttons.Facebook,
+                          text: "Sign in with facebook",
+                          onPressed: () async {
+                            setState(() {
+                              _loggingInFacebook = true;
+                            });
+                            loginController.setMedium('facebook');
+                            await this.login();
+                            setState(() {
+                              _loggingInFacebook = false;
+                            });
+                          },
+                        ),
+                  _loggingInGoogle
+                      ? SignInButton(
+                          Buttons.Google,
+                          text: "Signing in process...",
+                          onPressed: () async {},
+                        )
+                      : SignInButton(
+                          Buttons.Google,
+                          text: "Sign in with google",
+                          onPressed: () async {
+                            setState(() {
+                              _loggingInGoogle = true;
+                            });
+                            loginController.setMedium('google');
+                            await this.login();
+                            setState(() {
+                              _loggingInGoogle = false;
+                            });
+                          },
+                        ),
                 ],
               ),
             ),
@@ -101,7 +248,6 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   Widget clipShape() {
-    //double height = MediaQuery.of(context).size.height;
     return Stack(
       children: <Widget>[
         Opacity(
@@ -142,246 +288,21 @@ class _SignInScreenState extends State<SignInScreen> {
             ),
           ),
         ),
-        Container(
-          alignment: Alignment.bottomCenter,
-          margin: EdgeInsets.only(
-              top: _large
-                  ? _height / 30
-                  : (_medium ? _height / 25 : _height / 20)),
-          child: Image.asset(
-            'assets/images/logo.png',
-            height: _height / 3.5,
-            width: _width / 3.5,
-          ),
-        ),
       ],
     );
   }
 
-  Widget welcomeTextRow() {
-    return Container(
-      margin: EdgeInsets.only(left: _width / 20, top: _height / 100),
-      child: Row(
-        children: <Widget>[
-          TextFormatted(
-            text: "Welcome",
-            textStyle: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: _large ? 60 : (_medium ? 50 : 40),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget signInTextRow() {
-    return Container(
-      margin: EdgeInsets.only(left: _width / 15.0),
-      child: Row(
-        children: <Widget>[
-          TextFormatted(
-            text: "Sign in to your account",
-            textStyle: TextStyle(
-              fontWeight: FontWeight.w200,
-              fontSize: _large ? 20 : (_medium ? 17.5 : 15),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget form() {
-    return Container(
-      margin: EdgeInsets.only(
-          left: _width / 12.0, right: _width / 12.0, top: _height / 15.0),
-      child: Form(
-        key: _key,
-        child: Column(
-          children: <Widget>[
-            emailTextFormField(),
-            SizedBox(height: _height / 40.0),
-            passwordTextFormField(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget emailTextFormField() {
-    return CustomTextField(
-      keyboardType: TextInputType.emailAddress,
-      textEditingController: loginController.emailController,
-      icon: Icons.verified_user,
-      hint: "Email",
-    );
-  }
-
-  Widget passwordTextFormField() {
-    return CustomTextField(
-      keyboardType: TextInputType.emailAddress,
-      textEditingController: loginController.passwordController,
-      icon: Icons.lock,
-      obscureText: true,
-      hint: "Password",
-    );
-  }
-
-  Widget forgetPassTextRow() {
-    return Container(
-      margin: EdgeInsets.only(top: _height / 40.0),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              TextFormatted(
-                text: "Forgot your password?",
-                textStyle: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: _large ? 14 : (_medium ? 12 : 10)),
-              ),
-              SizedBox(
-                width: 5,
-              ),
-              GestureDetector(
-                onTap: () {},
-                child: TextFormatted(
-                  text: "Recover",
-                  textStyle: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
-                ),
-              )
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              TextFormatted(
-                text: "Already have token?",
-                textStyle: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: _large ? 14 : (_medium ? 12 : 10)),
-              ),
-              SizedBox(
-                width: 5,
-              ),
-              GestureDetector(
-                onTap: () {},
-                child: TextFormatted(
-                  text: "Activate your account",
-                  textStyle: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
-                ),
-              )
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget button() {
-    return RaisedButton(
-      elevation: 0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-      onPressed: _loggingIn
-          ? () {}
-          : () {
-              this.loginController.setMedium('normal');
-              loginUser();
-            },
-      textColor: Colors.white,
-      padding: EdgeInsets.all(0.0),
-      child: Container(
-        alignment: Alignment.center,
-        width: _large ? _width / 4 : (_medium ? _width / 3.75 : _width / 3.5),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-          gradient: LinearGradient(
-            colors: this.loggedIn
-                ? <Color>[
-                    Colors.green,
-                    Colors.green,
-                  ]
-                : <Color>[
-                    Theme.of(context).primaryColor,
-                    Theme.of(context).primaryColor
-                  ],
-          ),
-        ),
-        padding: const EdgeInsets.all(12.0),
-        child: this.loggedIn
-            ? Text("Logged In")
-            : this._loggingIn
-                ? Transform.scale(
-                    scale: 0.5,
-                    child: CircularProgressIndicator(
-                      valueColor:
-                          new AlwaysStoppedAnimation<Color>(Colors.white),
-                    ),
-                  )
-                : TextFormatted(
-                    text: 'SIGN IN',
-                    textStyle: TextStyle(
-                      fontSize: _large ? 14 : (_medium ? 12 : 10),
-                    ),
-                  ),
-      ),
-    );
-  }
-
-  Widget signUpTextRow() {
-    return Container(
-      margin: EdgeInsets.only(top: _height / 120.0),
-      child: Column(
-        children: [
-          TextFormatted(
-            text: "OR SIGN IN USING",
-            textStyle: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: _large ? 14 : (_medium ? 12 : 10),
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              GestureDetector(
-                onTap: () async {
-                  this.loginController.setMedium('facebook');
-                  this.loginUser();
-                },
-                child: Image(
-                  image: AssetImage('assets/images/fblogo.png'),
-                  height: 50,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  void loginUser() async {
-    setState(() {
-      _loggingIn = true;
-    });
+  login() async {
+    EasyLoading.show(status: 'Signing in...');
     bool status = await this.loginController.login();
+    EasyLoading.dismiss();
     if (status == true) {
-      Get.back();
+      Timer(Duration(seconds: 3), () {
+        Get.offAllNamed(
+          HOME_PAGE,
+          arguments: this.loginController.user,
+        );
+      });
     }
-    setState(() {
-      loggedIn = status;
-      _loggingIn = false;
-    });
   }
 }

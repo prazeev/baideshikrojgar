@@ -6,16 +6,25 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class HomeNews extends StatelessWidget {
-  final MainController mainController = Get.find();
+class HomeNews extends StatefulWidget {
+  final List datas;
+  HomeNews({this.datas});
+  @override
+  _HomeNewsState createState() => _HomeNewsState();
+}
+
+class _HomeNewsState extends State<HomeNews> {
+  MainController mainController = Get.find();
   @override
   Widget build(BuildContext context) {
     List<Widget> allnews = [];
-    allnews = this.mainController.homeNews.map((news) {
-      return HomeNewsTile(
-        news: news,
-      );
-    }).toList();
+    if (this.widget.datas != null) {
+      allnews = this.widget.datas.map((news) {
+        return HomeNewsTile(
+          news: news,
+        );
+      }).toList();
+    }
     return Container(
       child: Column(
         children: allnews,
@@ -31,7 +40,7 @@ class HomeNewsTile extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    if (news['isBigTile']) {
+    if (news['is_featured'] == '1') {
       return Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -51,7 +60,8 @@ class HomeNewsTile extends StatelessWidget {
                   CircleAvatar(
                     radius: JOB_TILE_HEIGHT / 2.5,
                     backgroundImage: NetworkImage(
-                      news['picture'],
+                      'http://sajhasabal.com/uploads/contents/thumbs/small/' +
+                          news['featured_img'],
                     ),
                   ),
                   Expanded(
@@ -84,7 +94,9 @@ class HomeNewsTile extends StatelessWidget {
               width: double.infinity,
               height: JOB_TILE_HEIGHT * 3,
               child: CachedNetworkImage(
-                imageUrl: news['picture'],
+                imageUrl:
+                    'http://sajhasabal.com/uploads/contents/thumbs/small/' +
+                        news['featured_img'],
                 fit: BoxFit.cover,
               ),
             ),
@@ -97,7 +109,7 @@ class HomeNewsTile extends StatelessWidget {
                 bottom: 10,
               ),
               child: TextFormatted(
-                text: news['abstract'],
+                text: news['meta_desc'],
                 maxline: 5,
               ),
             ),
@@ -106,9 +118,13 @@ class HomeNewsTile extends StatelessWidget {
       );
     } else {
       return JobTile(
+        type: 'html',
+        html: news['details'],
+        divider: true,
         title: news['title'],
-        picture: news['picture'],
-        abstract: news['abstract'],
+        picture: 'http://sajhasabal.com/uploads/contents/thumbs/small/' +
+            news['featured_img'],
+        abstract: news['meta_desc'],
         isBigImage: true,
         height: 100,
       );

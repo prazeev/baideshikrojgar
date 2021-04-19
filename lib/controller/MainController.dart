@@ -1,11 +1,20 @@
+import 'dart:convert';
+
+import 'package:baideshikrojgar/controller/ApiController.dart';
 import 'package:baideshikrojgar/models/User.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 
 class MainController extends GetxController {
   // Logged in user
-  User user;
+  User user = User(
+    email: '',
+    name: '',
+  );
   MainController({
     this.user,
+    this.apiController,
   });
   // Internet connections
   bool isInternetConnected = false;
@@ -13,6 +22,15 @@ class MainController extends GetxController {
     this.isInternetConnected = val;
     update();
   }
+
+  List notifications = [
+    {
+      "title": "Random Notification",
+      "description": "Random description",
+      "time": "1h",
+      "type": "new_news",
+    }
+  ];
 
   // Banners
   List<Map<String, String>> banners = [
@@ -34,38 +52,113 @@ class MainController extends GetxController {
     {
       "path": "assets/images/Bank.png",
       "key": "1",
-    },
-    {
-      "path": "assets/images/Embassies.png",
-      "key": "2",
+      "title": "Bank list",
     },
     {
       "path": "assets/images/Insourance.png",
-      "key": "3",
+      "key": "6",
+      "title": "Insurance Companies",
     },
     {
       "path": "assets/images/Medical.png",
-      "key": "4",
+      "key": "3",
+      "title": "Medical Centers",
     },
     {
       "path": "assets/images/Orientation.png",
-      "key": "5",
+      "key": "2",
+      "title": "Orientation Centers",
     },
     {
       "path": "assets/images/Training.png",
-      "key": "6",
+      "key": "4",
+      "title": "Training Centers",
+    },
+    {
+      "path": "assets/images/Embassies.png",
+      "key": "5",
+      "title": "Embassies",
     },
   ];
-  List<dynamic> homeLatestJobs = [
-    {
-      "picture": "https://picsum.photos/200",
-      "title": "A",
-      "salarymax": "2000",
-      "salarymin": "5000",
-      "location": "Kathmandu nepal jhapa",
-      "daysLeft": "Few days left for application",
-    }
-  ];
+  Map<String, dynamic> allApis = {
+    "latest_jobs": {
+      "total": 0,
+      "per_page": 25,
+      "current_page": 0,
+      "last_page": 0,
+      "first_page_url": null,
+      "last_page_url": null,
+      "next_page_url": null,
+      "prev_page_url": null,
+      "path": null,
+    },
+    "featured_jobs": {
+      "total": 0,
+      "per_page": 25,
+      "current_page": 0,
+      "last_page": 0,
+      "first_page_url": null,
+      "last_page_url": null,
+      "next_page_url": null,
+      "prev_page_url": null,
+      "path": null,
+    },
+    "manpowers": {
+      "total": 0,
+      "per_page": 25,
+      "current_page": 0,
+      "last_page": 0,
+      "first_page_url": null,
+      "last_page_url": null,
+      "next_page_url": null,
+      "prev_page_url": null,
+      "path": null,
+    },
+    "countries": {
+      "total": 0,
+      "per_page": 25,
+      "current_page": 0,
+      "last_page": 0,
+      "first_page_url": null,
+      "last_page_url": null,
+      "next_page_url": null,
+      "prev_page_url": null,
+      "path": null,
+    },
+    "jobs_by_countries": {
+      "total": 0,
+      "per_page": 25,
+      "current_page": 0,
+      "last_page": 0,
+      "first_page_url": null,
+      "last_page_url": null,
+      "next_page_url": null,
+      "prev_page_url": null,
+      "path": null,
+    },
+    "categories": {
+      "total": 0,
+      "per_page": 25,
+      "current_page": 0,
+      "last_page": 0,
+      "first_page_url": null,
+      "last_page_url": null,
+      "next_page_url": null,
+      "prev_page_url": null,
+      "path": null,
+    },
+    "jobs_by_categories": {
+      "total": 0,
+      "per_page": 25,
+      "current_page": 0,
+      "last_page": 0,
+      "first_page_url": null,
+      "last_page_url": null,
+      "next_page_url": null,
+      "prev_page_url": null,
+      "path": null,
+    },
+  };
   List<dynamic> homeManpowers = [
     {
       "picture": "https://picsum.photos/200",
@@ -106,9 +199,50 @@ class MainController extends GetxController {
     },
   ];
   static MainController get to => Get.find();
+
+  ApiController apiController;
+
+  Future refreshNotifications() async {
+    EasyLoading.show(status: 'We are refreshing...');
+    EasyLoading.dismiss();
+  }
+
   bool isRadioPlaying = false;
   setIsRadioPlaying(bool value) {
     this.isRadioPlaying = value;
     update();
+  }
+
+  fetchAllDatas({
+    @required String key,
+    bool first = false,
+    String path = '',
+  }) async {
+    if (this.allApis.containsKey(key)) {
+      bool externalurl = !(path.length > 0);
+      if (!first) {
+        path = this.allApis[key]['next_page_url'];
+      }
+      if (path == null) {
+        return [];
+      }
+      var res = await this
+          .apiController
+          .getDataFuture(path, externalurl: externalurl);
+
+      var data = json.decode(res.body);
+      this.allApis[key] = data;
+      return data['data'];
+    }
+  }
+
+  fetchAllDatasNonPaginated({
+    String path = '',
+  }) async {
+    bool externalurl = !(path.length > 0);
+    var res =
+        await this.apiController.getDataFuture(path, externalurl: externalurl);
+    var data = json.decode(res.body);
+    return data;
   }
 }

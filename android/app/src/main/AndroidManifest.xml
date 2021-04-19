@@ -1,7 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.baideshikrojgar">
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
    <application
-        android:label="baideshikrojgar"
+        android:label="Baideshik Rojgar"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
@@ -32,6 +34,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <!-- Add the following service -->
+        <service
+            android:name="live.exit.musicplayer.MusicPlayerService"
+            android:enabled="true" />
         <meta-data android:name="com.facebook.sdk.ApplicationId"
     android:value="@string/facebook_app_id"/>
 

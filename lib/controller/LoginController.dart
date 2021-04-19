@@ -8,12 +8,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginController extends GetxController {
   TextEditingController emailController;
   TextEditingController passwordController;
   String medium = 'normal';
+  GoogleSignInAccount googleUser;
   FacebookLogin facebookLogin = FacebookLogin();
+  GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: [
+      'email',
+    ],
+  );
   User user = User();
   bool loggingIn = false, loggedIn = false;
   var setLoggedIn, setLoggingIn;
@@ -35,6 +43,10 @@ class LoginController extends GetxController {
     this.medium = medium;
   }
 
+  GoogleSignIn getGoogleSignIn() {
+    return this._googleSignIn;
+  }
+
   login() async {
     this.loggingIn = true;
     switch (this.medium) {
@@ -46,6 +58,9 @@ class LoginController extends GetxController {
         break;
       case 'facebook':
         await this.fbLogin();
+        break;
+      case 'google':
+        await this.googleLogin();
         break;
       default:
         AwesomeDialog(
@@ -104,7 +119,39 @@ class LoginController extends GetxController {
       } else {
         this.loggedIn = true;
         this.loggingIn = false;
-        this.user.setToken(body['access_token']);
+        this.user = User(
+          token: body['access_token'],
+          email: body['user']['email'],
+          name: body['user']['name'],
+          picture: body['user']['main_image'],
+          bio: body['user']['profile']['career_objective'],
+          passportno: body['user']['profile']['passport_no'],
+          passportexpiry: body['user']['profile']['passport_expiry'],
+          birthdate: body['user']['profile']['dob'],
+          permanentaddress:
+              body['user']['profile']['permanent_address'] ?? "Not Specified",
+          temporaryaddress:
+              body['user']['profile']['temporary_address'] ?? "Not Specified",
+          mobilenumber:
+              body['user']['profile']['mobile_number'] ?? "Not Specified",
+          height: body['user']['profile']['height'] ?? "Not Specified",
+          weight: body['user']['profile']['weight'] ?? "Not Specified",
+          religion: body['user']['profile']['religion'] ?? "Not Specified",
+          fathersname:
+              body['user']['profile']['father_name'] ?? "Not Specified",
+          gender: body['user']['profile']['gender'] ?? "Not Specified",
+          nationality:
+              body['user']['profile']['nationality'] ?? "Not Specified",
+          maritualstatus:
+              body['user']['profile']['marital_status'] ?? "Not Specified",
+          educations: body['user']['educations'],
+          trainings: body['user']['trainings'],
+          experiences: body['user']['experiences'],
+          languages: body['user']['languages'],
+        );
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('user', jsonEncode(body));
+        await prefs.setBool('isLoggedIn', true);
         AwesomeDialog(
           context: Get.context,
           title: "Done",
@@ -161,6 +208,21 @@ class LoginController extends GetxController {
       default:
         this.loggedIn = false;
         this.loggingIn = false;
+    }
+  }
+
+  googleLogin() async {
+    try {
+      this.googleUser = await _googleSignIn.signIn();
+      print(
+        "Email: " + this.googleUser.toString(),
+      );
+      if (googleUser != null) {
+        this.setEmail(googleUser.email);
+        this.setPassword('gmail_sajhajobs');
+      }
+    } catch (error) {
+      print("bashu" + error.toString());
     }
   }
 }

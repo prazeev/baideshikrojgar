@@ -4,17 +4,32 @@ import 'package:baideshikrojgar/utlis/global/textView.dart';
 import 'package:baideshikrojgar/views/fragements/jobTile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:nice_button/NiceButton.dart';
 
 class HomeLatestJobs extends StatefulWidget {
+  final List jobs;
+  HomeLatestJobs({this.jobs});
   @override
   _HomeLatestJobsState createState() => _HomeLatestJobsState();
 }
 
 class _HomeLatestJobsState extends State<HomeLatestJobs> {
-  MainController mainController = Get.find();
   @override
   Widget build(BuildContext context) {
+    List homelatestjobs = this.widget.jobs.map<Widget>((dynamic job) {
+      return JobTile(
+        height: 80,
+        divider: true,
+        type: 'job',
+        picture: job['picture'],
+        jobId: job['id'],
+        title: job['title'],
+        salarymax: job['salarymax'],
+        salarymin: job['salarymin'],
+        // location: job['location'],
+        daysLeft: job['daysLeft'],
+      );
+    }).toList();
+
     return Column(
       children: [
         Container(
@@ -29,35 +44,15 @@ class _HomeLatestJobsState extends State<HomeLatestJobs> {
               TextFormatted(
                 text: "Latest Jobs",
               ),
-              ViewAllButton(
-                onPressed: () {},
-              ),
+              RaisedButton(
+                child: ViewAllButton(),
+                onPressed: () => Get.toNamed(ALL_JOBS),
+              )
             ],
           ),
         ),
-        SizedBox(
-          height: JOB_TILE_HEIGHT * this.mainController.homeLatestJobs.length +
-              (this.mainController.homeLatestJobs.length * 1.5),
-          child: ListView.separated(
-            itemBuilder: (BuildContext context, int i) {
-              dynamic job = this.mainController.homeLatestJobs[i];
-              return JobTile(
-                picture: job['picture'],
-                title: job['title'],
-                salarymax: job['salarymax'],
-                salarymin: job['salarymin'],
-                location: job['location'],
-                daysLeft: job['daysLeft'],
-              );
-            },
-            separatorBuilder: (BuildContext context, int i) {
-              return Divider(
-                height: 1.5,
-                color: Theme.of(context).secondaryHeaderColor,
-              );
-            },
-            itemCount: this.mainController.homeLatestJobs.length,
-          ),
+        Column(
+          children: [...homelatestjobs],
         ),
       ],
     );
@@ -65,32 +60,27 @@ class _HomeLatestJobsState extends State<HomeLatestJobs> {
 }
 
 class ViewAllButton extends StatelessWidget {
-  final dynamic onPressed;
-  ViewAllButton({this.onPressed});
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: this.onPressed(),
-      child: Container(
-        padding: EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor,
-          borderRadius: BorderRadius.circular(5),
-        ),
-        child: Row(
-          children: [
-            Icon(
-              Icons.remove_red_eye,
+    return Container(
+      padding: EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        color: Theme.of(context).primaryColor,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            Icons.remove_red_eye,
+            color: Colors.white,
+          ),
+          TextFormatted(
+            text: " View all",
+            textStyle: TextStyle(
               color: Colors.white,
             ),
-            TextFormatted(
-              text: " View all",
-              textStyle: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

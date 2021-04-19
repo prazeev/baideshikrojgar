@@ -30,12 +30,20 @@ dependencies:
   flutter_easyloading: ^2.2.2
   http: ^0.12.2
   package_info: ^0.4.0+16
+  flutter_slidable:
   flutter_html: ^1.0.0
   url_launcher: ^5.5.0
   cached_network_image: ^2.2.0+1
   flutter_facebook_login: ^3.0.0
   carousel_slider: ^3.0.0
+  flutter_countdown_timer: ^3.0.1
+  multi_select_flutter: ^3.1.8
+  flutter_signin_button: ^1.1.0
+  google_sign_in: ^4.5.9
+  shimmer: ^1.1.2
   connectivity: ^2.0.2
+  textfield_tags: ^1.1.1
+  shared_preferences: ^0.5.12+4
 
 
 

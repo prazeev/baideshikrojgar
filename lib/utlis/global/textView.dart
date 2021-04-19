@@ -37,3 +37,20 @@ class _TextFormattedState extends State<TextFormatted> {
     );
   }
 }
+
+class SimplePrimaryTitle extends StatelessWidget {
+  final String title;
+  SimplePrimaryTitle({this.title});
+  @override
+  Widget build(BuildContext context) {
+    return TextFormatted(
+      text: this.title,
+      maxline: 12,
+      textStyle: TextStyle(
+        color: Theme.of(context).primaryColor,
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
+}

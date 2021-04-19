@@ -1,5 +1,7 @@
+import 'package:baideshikrojgar/utlis/constants/Constants.dart';
 import 'package:baideshikrojgar/utlis/global/textView.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class HomeMenu extends StatefulWidget {
   @override
@@ -23,19 +25,24 @@ class _HomeMenuState extends State<HomeMenu> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.language,
-                  color: Theme.of(context).primaryColor,
-                  size: 40.0,
-                ),
-                TextNormal(
-                  text: "Country",
-                ),
-              ],
+          GestureDetector(
+            onTap: () {
+              Get.toNamed(ALL_COUNTRIES);
+            },
+            child: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.language,
+                    color: Theme.of(context).primaryColor,
+                    size: 40.0,
+                  ),
+                  TextNormal(
+                    text: "Country",
+                  ),
+                ],
+              ),
             ),
           ),
           Container(
@@ -43,19 +50,24 @@ class _HomeMenuState extends State<HomeMenu> {
             height: 50,
             color: Theme.of(context).primaryColor,
           ),
-          Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.trending_up,
-                  color: Theme.of(context).primaryColor,
-                  size: 40.0,
-                ),
-                TextNormal(
-                  text: "Trendings",
-                ),
-              ],
+          GestureDetector(
+            onTap: () {
+              Get.toNamed(FEATURED_JOBS);
+            },
+            child: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.trending_up,
+                    color: Theme.of(context).primaryColor,
+                    size: 40.0,
+                  ),
+                  TextNormal(
+                    text: "Trendings",
+                  ),
+                ],
+              ),
             ),
           ),
           Container(
@@ -63,19 +75,24 @@ class _HomeMenuState extends State<HomeMenu> {
             height: 50,
             color: Theme.of(context).primaryColor,
           ),
-          Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.category,
-                  color: Theme.of(context).primaryColor,
-                  size: 40.0,
-                ),
-                TextNormal(
-                  text: "Categories",
-                ),
-              ],
+          GestureDetector(
+            onTap: () {
+              Get.toNamed(ALL_CATEGORIES);
+            },
+            child: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.category,
+                    color: Theme.of(context).primaryColor,
+                    size: 40.0,
+                  ),
+                  TextNormal(
+                    text: "Categories",
+                  ),
+                ],
+              ),
             ),
           ),
         ],
