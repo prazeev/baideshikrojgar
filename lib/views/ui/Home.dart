@@ -128,6 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return {
       "picture": getFirstImage(item['images']),
       "title": item['title_en'],
+      "description_en": item['description_np'],
       "location": item['address'],
       "contact": item['contact'],
     };

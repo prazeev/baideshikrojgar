@@ -128,6 +128,8 @@ class _AllManpowerState extends State<AllManpower> {
   _buildList(dynamic item) {
     return JobTile(
       height: 90,
+      jobId: item['id'],
+      type: 'manpowerjobs',
       picture: getFirstImage(item['logo']),
       title: item['name'],
       location: item['location'],

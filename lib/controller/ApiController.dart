@@ -4,6 +4,7 @@ import 'package:baideshikrojgar/utlis/constants/Constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiController {
   ApiController({
@@ -34,6 +35,7 @@ class ApiController {
     api: true,
     silent: false,
     externalurl: false,
+    ignoreOffline = false,
   }) async {
     var fullUrl = externalurl
         ? apiUrl
@@ -44,7 +46,23 @@ class ApiController {
     if (!silent) {
       EasyLoading.show(status: message);
     }
-    var data = await http.get(fullUrl, headers: _setHeaders());
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var data;
+    var cacheddata;
+    if (ignoreOffline) {
+      cacheddata = null;
+    } else {
+      cacheddata = prefs.getString(fullUrl);
+    }
+    if (cacheddata == null) {
+      data = await http.get(fullUrl, headers: _setHeaders());
+      await prefs.setString(fullUrl, data.body.toString());
+    } else {
+      CachedDataHandler cachedDataHandler = new CachedDataHandler();
+      cachedDataHandler.setBody(cacheddata);
+      data = cachedDataHandler;
+    }
+
     if (!silent) {
       EasyLoading.dismiss();
     }
@@ -64,4 +82,11 @@ class ApiController {
         "Accept": "application/json",
         "Authorization": "Bearer " + this.token ?? "TEST"
       };
+}
+
+class CachedDataHandler {
+  String body;
+  setBody(String body) {
+    this.body = body;
+  }
 }

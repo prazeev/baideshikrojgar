@@ -14,6 +14,7 @@ import 'package:baideshikrojgar/views/ui/Forex.dart';
 import 'package:baideshikrojgar/views/ui/Home.dart';
 import 'package:baideshikrojgar/views/ui/LTWorkPermitSearch.dart';
 import 'package:baideshikrojgar/views/ui/Login.dart';
+import 'package:baideshikrojgar/views/ui/ManpowerJobs.dart';
 import 'package:baideshikrojgar/views/ui/Notifications.dart';
 import 'package:baideshikrojgar/views/ui/Profile.dart';
 import 'package:baideshikrojgar/views/ui/ReadNews.dart';
@@ -86,6 +87,10 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: FEATURED_JOBS,
           page: () => TrendingJobs(),
+        ),
+        GetPage(
+          name: MANPOWER_JOBS,
+          page: () => ManpowerJobs(),
         ),
         GetPage(
           name: DIRECTORY_LISTING,

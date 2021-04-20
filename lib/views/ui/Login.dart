@@ -156,6 +156,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             ),
                             TextFormatted(
                               text: item['text'],
+                              maxline: 100,
                               textStyle: TextStyle(
                                 fontWeight: FontWeight.w400,
                                 fontSize: 18,
@@ -238,6 +239,18 @@ class _SignInScreenState extends State<SignInScreen> {
                             });
                           },
                         ),
+                  FlatButton(
+                    onPressed: () {
+                      this.loginController.setMedium('skiplogin');
+                      login(loginText: "Logging with demo account...");
+                    },
+                    child: TextFormatted(
+                      text: "Skip & use demo",
+                      textStyle: TextStyle(
+                        fontSize: 11,
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
@@ -292,8 +305,8 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  login() async {
-    EasyLoading.show(status: 'Signing in...');
+  login({String loginText = 'Signing in...'}) async {
+    EasyLoading.show(status: loginText);
     bool status = await this.loginController.login();
     EasyLoading.dismiss();
     if (status == true) {

@@ -64,7 +64,8 @@ class HomeManpowerEmbassy extends StatelessWidget {
       return JobTile(
         height: 90,
         divider: true,
-        type: 'manpowers',
+        jobId: tile['id'],
+        type: 'manpowerjobs',
         picture: tile['picture'],
         title: tile['title'],
         abstract: tile['abstract'],
@@ -76,7 +77,8 @@ class HomeManpowerEmbassy extends StatelessWidget {
       return JobTile(
         divider: true,
         height: 90,
-        type: 'embassies',
+        type: 'html',
+        html: tile['description_en'],
         picture: tile['picture'],
         title: tile['title'],
         location: tile['location'],

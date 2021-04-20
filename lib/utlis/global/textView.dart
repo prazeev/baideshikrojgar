@@ -31,7 +31,7 @@ class _TextFormattedState extends State<TextFormatted> {
   @override
   Widget build(BuildContext context) {
     return Text(
-      this.widget.text,
+      this.widget.text == null ? '-' : this.widget.text,
       maxLines: this.widget.maxline,
       style: this.widget.textStyle,
     );

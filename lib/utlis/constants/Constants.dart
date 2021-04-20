@@ -22,6 +22,7 @@ String VIEW_POST = 'viewpost';
 String COUNTRY_WISE_INFO = 'countrywiseinfo';
 String VIEW_JOB = 'viewjob';
 String APPLY_JOB = 'applyjob';
+String MANPOWER_JOBS = 'manpowerjobs';
 
 String LT_SEARCH = 'ltsearch';
 String PASSPORT_NO_SEARCH = 'passportsearch';

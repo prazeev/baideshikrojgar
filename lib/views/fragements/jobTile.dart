@@ -74,6 +74,23 @@ class _JobTileState extends State<JobTile> {
           print(this.widget.jobId);
           Get.toNamed(VIEW_JOB, arguments: this.widget.jobId);
         }
+        if (this.widget.type == "manpowerjobs") {
+          Get.toNamed(MANPOWER_JOBS, arguments: {
+            "manpower": this.widget.title,
+            "id": this.widget.jobId,
+            "widget": JobTile(
+              height: 100,
+              title: this.widget.title,
+              abstract: this.widget.abstract,
+              location: this.widget.location,
+              contact: this.widget.contact,
+              picture: this.widget.picture,
+              jobId: this.widget.jobId,
+              canCall: true,
+              type: "manpower",
+            ),
+          });
+        }
       },
       child: Column(
         children: [

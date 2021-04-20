@@ -226,9 +226,11 @@ class MainController extends GetxController {
       if (path == null) {
         return [];
       }
-      var res = await this
-          .apiController
-          .getDataFuture(path, externalurl: externalurl);
+      var res = await this.apiController.getDataFuture(
+            path,
+            externalurl: externalurl,
+            ignoreOffline: this.isInternetConnected,
+          );
 
       var data = json.decode(res.body);
       this.allApis[key] = data;

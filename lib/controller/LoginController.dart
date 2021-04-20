@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:device_info/device_info.dart';
 
 class LoginController extends GetxController {
   TextEditingController emailController;
@@ -43,8 +44,27 @@ class LoginController extends GetxController {
     this.medium = medium;
   }
 
+  setId(String id) {
+    this.user.id = id;
+  }
+
+  setName(String name) {
+    this.user.name = name;
+  }
+
   GoogleSignIn getGoogleSignIn() {
     return this._googleSignIn;
+  }
+
+  Future<String> _getId() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    if (Theme.of(Get.context).platform == TargetPlatform.iOS) {
+      IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
+      return iosDeviceInfo.identifierForVendor; // unique ID on iOS
+    } else {
+      AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
+      return androidDeviceInfo.androidId; // unique ID on Android
+    }
   }
 
   login() async {
@@ -55,12 +75,21 @@ class LoginController extends GetxController {
         String p = this.passwordController.text.trim();
         this.setEmail(e);
         this.setPassword(p);
+        this.setId('1');
         break;
       case 'facebook':
         await this.fbLogin();
         break;
       case 'google':
         await this.googleLogin();
+        break;
+
+      case 'skiplogin':
+        String deviceid = await _getId();
+        this.setEmail(deviceid + '-demo@sajhajobs.com');
+        this.setPassword('facebook_sajhajobs');
+        this.setId(deviceid);
+        this.setName('Baideshik Rojgar Pvt. Ltd.');
         break;
       default:
         AwesomeDialog(

@@ -2,9 +2,11 @@ import 'dart:io';
 
 import 'package:baideshikrojgar/controller/MainController.dart';
 import 'package:baideshikrojgar/utlis/constants/Constants.dart';
+import 'package:baideshikrojgar/utlis/global/Accodain.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:package_info/package_info.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MainDrawer extends StatefulWidget {
@@ -49,12 +51,12 @@ class _MainDrawerState extends State<MainDrawer> {
                     // color: Color(0xFF56ccf2),
                   ),
                 ),
-                ListTile(
-                  title: Text('Home'),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
+                // ListTile(
+                //   title: Text('Home'),
+                //   onTap: () {
+                //     Navigator.of(context).pop();
+                //   },
+                // ),
                 ExpansionTile(
                   title: Text("महत्वपूर्ण जानकारीहरु"),
                   children: <Widget>[
@@ -408,11 +410,15 @@ class _MainDrawerState extends State<MainDrawer> {
                 ),
                 ListTile(
                   title: Text('भाषा-ज्ञान'),
-                  onTap: () {},
+                  onTap: () {
+                    Get.dialog(BlurryDialog("Please wait", "Comming soon"));
+                  },
                 ),
                 ListTile(
                   title: Text('CV बनाउनुहोस्'),
-                  onTap: () {},
+                  onTap: () {
+                    Get.dialog(BlurryDialog("Please wait", "Comming soon"));
+                  },
                 ),
                 ListTile(
                   title: Text('समाचारहरु'),
@@ -440,16 +446,35 @@ class _MainDrawerState extends State<MainDrawer> {
                 ),
                 ListTile(
                   title: Text('समस्या तथा गुनाशो'),
-                  onTap: () {},
+                  onTap: () {
+                    final Uri params = Uri(
+                      scheme: 'mailto',
+                      path: 'sajhajobs@gmail.com',
+                      query: 'subject=समस्या तथा गुनाशो बारे&body=',
+                    );
+                    final url = params.toString();
+                    launch(url);
+                  },
                 ),
                 ListTile(
                   title: Text('हाम्रो बारे'),
-                  onTap: () {},
+                  onTap: () {
+                    Get.toNamed(VIEW_POST, arguments: 282);
+                  },
                 ),
                 ListTile(
-                  title: Text('Rate us*****'),
-                  onTap: () {},
+                  title: Text('Logout'),
+                  onTap: () async {
+                    SharedPreferences sharedPreferences =
+                        await SharedPreferences.getInstance();
+                    await sharedPreferences.remove('isLoggedIn');
+                    Get.offAllNamed(LOGIN_PAGE);
+                  },
                 ),
+                // ListTile(
+                //   title: Text('Rate us*****'),
+                //   onTap: () {},
+                // ),
               ],
             ),
           ),
