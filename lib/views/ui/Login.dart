@@ -219,26 +219,26 @@ class _SignInScreenState extends State<SignInScreen> {
                             });
                           },
                         ),
-                  _loggingInGoogle
-                      ? SignInButton(
-                          Buttons.Google,
-                          text: "Signing in process...",
-                          onPressed: () async {},
-                        )
-                      : SignInButton(
-                          Buttons.Google,
-                          text: "Sign in with google",
-                          onPressed: () async {
-                            setState(() {
-                              _loggingInGoogle = true;
-                            });
-                            loginController.setMedium('google');
-                            await this.login();
-                            setState(() {
-                              _loggingInGoogle = false;
-                            });
-                          },
-                        ),
+                  // _loggingInGoogle
+                  //     ? SignInButton(
+                  //         Buttons.Google,
+                  //         text: "Signing in process...",
+                  //         onPressed: () async {},
+                  //       )
+                  //     : SignInButton(
+                  //         Buttons.Google,
+                  //         text: "Sign in with google",
+                  //         onPressed: () async {
+                  //           setState(() {
+                  //             _loggingInGoogle = true;
+                  //           });
+                  //           loginController.setMedium('google');
+                  //           await this.login();
+                  //           setState(() {
+                  //             _loggingInGoogle = false;
+                  //           });
+                  //         },
+                  //       ),
                   FlatButton(
                     onPressed: () {
                       this.loginController.setMedium('skiplogin');
