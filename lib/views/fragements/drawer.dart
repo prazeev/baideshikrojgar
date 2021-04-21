@@ -4,6 +4,7 @@ import 'package:baideshikrojgar/controller/MainController.dart';
 import 'package:baideshikrojgar/utlis/constants/Constants.dart';
 import 'package:baideshikrojgar/utlis/global/Accodain.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -468,7 +469,7 @@ class _MainDrawerState extends State<MainDrawer> {
                     SharedPreferences sharedPreferences =
                         await SharedPreferences.getInstance();
                     await sharedPreferences.remove('isLoggedIn');
-                    Get.offAllNamed(LOGIN_PAGE);
+                    SystemChannels.platform.invokeMethod('SystemNavigator.pop');
                   },
                 ),
                 // ListTile(

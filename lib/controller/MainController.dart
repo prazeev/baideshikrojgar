@@ -239,30 +239,36 @@ class MainController extends GetxController {
   }
 
   subscribeModel(String model, int modelid) async {
-    var res = await this.apiController.getDataFuture('subscription_system/' +
-        model +
-        '/' +
-        modelid.toString() +
-        '/subscribe');
+    var res = await this.apiController.getDataFuture(
+          'subscription_system/' +
+              model +
+              '/' +
+              modelid.toString() +
+              '/subscribe',
+          ignoreOffline: this.isInternetConnected,
+        );
     dynamic data = json.decode(res.body);
-    print(data);
     return data;
   }
 
   unsubscribeModel(String model, int modelid) async {
-    var res = await this.apiController.getDataFuture('subscription_system/' +
-        model +
-        '/' +
-        modelid.toString() +
-        '/unsubscribe');
+    var res = await this.apiController.getDataFuture(
+          'subscription_system/' +
+              model +
+              '/' +
+              modelid.toString() +
+              '/unsubscribe',
+          ignoreOffline: this.isInternetConnected,
+        );
     dynamic data = json.decode(res.body);
-    print(data);
     return data;
   }
 
   toggleSubscriptionModel(String model, int modelid) async {
     var res = await this.apiController.getDataFuture(
-        'subscription_system/' + model + '/' + modelid.toString() + '/toggle');
+          'subscription_system/' + model + '/' + modelid.toString() + '/toggle',
+          ignoreOffline: this.isInternetConnected,
+        );
     dynamic data = json.decode(res.body);
     return data;
   }
@@ -271,8 +277,11 @@ class MainController extends GetxController {
     String path = '',
   }) async {
     bool externalurl = !(path.length > 0);
-    var res =
-        await this.apiController.getDataFuture(path, externalurl: externalurl);
+    var res = await this.apiController.getDataFuture(
+          path,
+          externalurl: externalurl,
+          ignoreOffline: this.isInternetConnected,
+        );
     var data = json.decode(res.body);
     return data;
   }

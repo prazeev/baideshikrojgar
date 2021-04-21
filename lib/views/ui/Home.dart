@@ -154,12 +154,12 @@ class _HomeScreenState extends State<HomeScreen> {
               Get.toNamed(NOTIFICATION);
             },
           ),
-          IconButton(
-            icon: Icon(Icons.people),
-            onPressed: () {
-              Get.toNamed(PROFILE);
-            },
-          ),
+          // IconButton(
+          //   icon: Icon(Icons.people),
+          //   onPressed: () {
+          //     Get.toNamed(PROFILE);
+          //   },
+          // ),
         ],
       ),
       drawer: MainDrawer(),
@@ -193,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      floatingActionButton: GlobalRadio(),
+      // floatingActionButton: GlobalRadio(),
     );
   }
 

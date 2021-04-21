@@ -40,10 +40,10 @@ class _ViewJobState extends State<ViewJob> {
     setState(() {
       isLoading = true;
     });
-    dynamic res = await this
-        .mainController
-        .apiController
-        .getDataFuture('view_job/' + id.toString());
+    dynamic res = await this.mainController.apiController.getDataFuture(
+          'view_job/' + id.toString(),
+          ignoreOffline: this.mainController.isInternetConnected,
+        );
     var d = json.decode(res.body);
     if (d['error']) {
       setState(() {
