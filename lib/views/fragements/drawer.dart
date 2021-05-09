@@ -5,6 +5,7 @@ import 'package:baideshikrojgar/utlis/constants/Constants.dart';
 import 'package:baideshikrojgar/utlis/global/Accodain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:get/get.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -466,10 +467,12 @@ class _MainDrawerState extends State<MainDrawer> {
                 ListTile(
                   title: Text('Logout'),
                   onTap: () async {
+                    FacebookLogin facebookLogin = FacebookLogin();
+                    facebookLogin.logOut();
                     SharedPreferences sharedPreferences =
                         await SharedPreferences.getInstance();
                     await sharedPreferences.remove('isLoggedIn');
-                    SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                    Get.offAllNamed(SPLASHSCREEN);
                   },
                 ),
                 // ListTile(

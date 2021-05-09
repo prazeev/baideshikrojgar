@@ -30,10 +30,10 @@ class _ViewPostState extends State<ViewPost> {
     setState(() {
       isLoading = true;
     });
-    dynamic res = await this
-        .mainController
-        .apiController
-        .getDataFuture('view_post/' + id.toString());
+    dynamic res = await this.mainController.apiController.getDataFuture(
+          'view_post/' + id.toString(),
+          ignoreOffline: this.mainController.isInternetConnected,
+        );
     var d = json.decode(res.body);
     setState(() {
       data = d;

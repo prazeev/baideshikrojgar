@@ -141,6 +141,8 @@ class _SignInScreenState extends State<SignInScreen> {
                       dynamic item = loginSliderItems[itemIndex];
                       return Container(
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             item['image']['type'] == 'assets'
                                 ? Image(

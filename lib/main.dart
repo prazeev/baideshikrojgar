@@ -1,5 +1,7 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:baideshikrojgar/utlis/constants/Constants.dart';
 import 'package:baideshikrojgar/views/fragements/experiences/experiences.dart';
+import 'package:baideshikrojgar/views/radio/RadioScreen.dart';
 import 'package:baideshikrojgar/views/ui/AllCatrgories.dart';
 import 'package:baideshikrojgar/views/ui/AllCountry.dart';
 import 'package:baideshikrojgar/views/ui/AllJobs.dart';
@@ -15,6 +17,7 @@ import 'package:baideshikrojgar/views/ui/Home.dart';
 import 'package:baideshikrojgar/views/ui/LTWorkPermitSearch.dart';
 import 'package:baideshikrojgar/views/ui/Login.dart';
 import 'package:baideshikrojgar/views/ui/ManpowerJobs.dart';
+import 'package:baideshikrojgar/views/ui/ManpowerSinglePage.dart';
 import 'package:baideshikrojgar/views/ui/Notifications.dart';
 import 'package:baideshikrojgar/views/ui/Profile.dart';
 import 'package:baideshikrojgar/views/ui/ReadNews.dart';
@@ -46,7 +49,9 @@ class MyApp extends StatelessWidget {
       getPages: [
         GetPage(
           name: SPLASHSCREEN,
-          page: () => SplashScreen(),
+          page: () => AudioServiceWidget(
+            child: SplashScreen(),
+          ),
         ),
         GetPage(
           name: LOGIN_PAGE,
@@ -83,6 +88,14 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: ALL_MANPOWER,
           page: () => AllManpower(),
+        ),
+        GetPage(
+          name: RADIO_PAGE,
+          page: () => RadioScreen(),
+        ),
+        GetPage(
+          name: MANPOWER_SINGLE,
+          page: () => ManpowerSinglePage(),
         ),
         GetPage(
           name: FEATURED_JOBS,

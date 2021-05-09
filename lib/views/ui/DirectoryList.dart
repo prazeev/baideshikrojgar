@@ -39,6 +39,10 @@ class _DirectoryListState extends State<DirectoryList> {
       });
   }
 
+  refreshHandler() async {
+    await this.fetchData(first: true);
+  }
+
   fetchData({bool first = false}) async {
     dynamic data = await this.mainController.fetchAllDatas(
           key: 'countries',
@@ -75,47 +79,50 @@ class _DirectoryListState extends State<DirectoryList> {
           text: info['title'],
         ),
       ),
-      body: Column(
-        children: [
-          CustomTextField(
-            elevation: 1,
-            hint: "Search here",
-            radius: 0,
-            textEditingController: searchTextController,
-            onTextChange: (String text) {
-              this.fetchData(first: true);
-            },
-          ),
-          Expanded(
-            child: isGridView
-                ? GridView.builder(
-                    itemCount: datas.length,
-                    controller: scrollController,
-                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 250.0,
-                      crossAxisSpacing: 7.0,
-                      mainAxisSpacing: 7.0,
-                      childAspectRatio: 1.2,
+      body: RefreshIndicator(
+        onRefresh: () => refreshHandler(),
+        child: Column(
+          children: [
+            CustomTextField(
+              elevation: 1,
+              hint: "Search here",
+              radius: 0,
+              textEditingController: searchTextController,
+              onTextChange: (String text) {
+                this.fetchData(first: true);
+              },
+            ),
+            Expanded(
+              child: isGridView
+                  ? GridView.builder(
+                      itemCount: datas.length,
+                      controller: scrollController,
+                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                        maxCrossAxisExtent: 250.0,
+                        crossAxisSpacing: 7.0,
+                        mainAxisSpacing: 7.0,
+                        childAspectRatio: 1.2,
+                      ),
+                      itemBuilder: (context, index) => _buildGrid(
+                        datas[index],
+                      ),
+                    )
+                  : ListView.separated(
+                      separatorBuilder: (context, index) {
+                        return Divider(
+                          height: 0.1,
+                          color: Colors.grey,
+                        );
+                      },
+                      itemBuilder: (context, index) => _buildList(
+                        datas[index],
+                      ),
+                      itemCount: datas.length,
+                      controller: scrollController,
                     ),
-                    itemBuilder: (context, index) => _buildGrid(
-                      datas[index],
-                    ),
-                  )
-                : ListView.separated(
-                    separatorBuilder: (context, index) {
-                      return Divider(
-                        height: 0.1,
-                        color: Colors.grey,
-                      );
-                    },
-                    itemBuilder: (context, index) => _buildList(
-                      datas[index],
-                    ),
-                    itemCount: datas.length,
-                    controller: scrollController,
-                  ),
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }

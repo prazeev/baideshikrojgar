@@ -1,3 +1,4 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:baideshikrojgar/utlis/constants/Constants.dart';
 import 'package:baideshikrojgar/utlis/global/textView.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -18,6 +19,7 @@ class JobTile extends StatefulWidget {
       html,
       dateField,
       contact;
+  final Color bgcolor;
   final bool isBigImage, bigTitle, divider, canCall;
   final dynamic jobId, jobCount;
   final double height, fontSize;
@@ -42,6 +44,7 @@ class JobTile extends StatefulWidget {
     this.html = '',
     this.divider = false,
     this.fontSize = 13,
+    this.bgcolor = Colors.white,
   });
   @override
   _JobTileState createState() => _JobTileState();
@@ -74,6 +77,12 @@ class _JobTileState extends State<JobTile> {
           print(this.widget.jobId);
           Get.toNamed(VIEW_JOB, arguments: this.widget.jobId);
         }
+        if (this.widget.type == "radio") {
+          AudioService.skipToQueueItem(this.widget.jobId);
+        }
+        if (this.widget.type == "manpower") {
+          Get.toNamed(MANPOWER_SINGLE);
+        }
         if (this.widget.type == "manpowerjobs") {
           Get.toNamed(MANPOWER_JOBS, arguments: {
             "manpower": this.widget.title,
@@ -105,7 +114,7 @@ class _JobTileState extends State<JobTile> {
                 ? JOB_TILE_HEIGHT
                 : this.widget.height,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: this.widget.bgcolor,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -209,6 +218,24 @@ class _JobTileState extends State<JobTile> {
                             : SizedBox(
                                 height: 1,
                               ),
+                        this.widget.abstract != ''
+                            ? Row(
+                                children: [
+                                  Expanded(
+                                    child: TextFormatted(
+                                      maxline: 2,
+                                      text: " " + this.widget.abstract,
+                                      textStyle: TextStyle(
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: 11,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : SizedBox(
+                                height: 1,
+                              ),
                         this.widget.location != ''
                             ? Row(
                                 children: [
@@ -221,24 +248,6 @@ class _JobTileState extends State<JobTile> {
                                     child: TextFormatted(
                                       maxline: 2,
                                       text: " " + this.widget.location,
-                                      textStyle: TextStyle(
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: 11,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              )
-                            : SizedBox(
-                                height: 1,
-                              ),
-                        this.widget.abstract != ''
-                            ? Row(
-                                children: [
-                                  Expanded(
-                                    child: TextFormatted(
-                                      maxline: 2,
-                                      text: " " + this.widget.abstract,
                                       textStyle: TextStyle(
                                         fontWeight: FontWeight.w300,
                                         fontSize: 11,

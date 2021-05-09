@@ -118,7 +118,10 @@ class _NotificationsState extends State<Notifications>
     String url = index == -1
         ? 'notifications/clear/'
         : 'notifications/clear/' + notifications[index]['id'].toString();
-    dynamic data = await this.mainController.apiController.getDataFuture(url);
+    dynamic data = await this.mainController.apiController.getDataFuture(
+          url,
+          ignoreOffline: this.mainController.isInternetConnected,
+        );
     dynamic d = json.decode(data.body);
     if (d['error']) {
       AwesomeDialog(

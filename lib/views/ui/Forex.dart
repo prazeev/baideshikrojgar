@@ -27,6 +27,7 @@ class _ForexState extends State<Forex> {
   fetchForex() async {
     var res = await this.mainController.apiController.getDataFuture(
           "forex",
+          ignoreOffline: this.mainController.isInternetConnected,
         );
     var data = json.decode(res.body);
     setState(() {

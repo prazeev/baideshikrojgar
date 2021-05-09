@@ -434,11 +434,13 @@ class LeftRightContent extends StatelessWidget {
               Expanded(
                 child: TextFormatted(
                   text: this.title,
+                  maxline: 10,
                 ),
               ),
               Expanded(
                 child: TextFormatted(
                   text: this.details,
+                  maxline: 10,
                 ),
               ),
             ],

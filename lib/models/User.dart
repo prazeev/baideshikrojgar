@@ -1,5 +1,10 @@
+import 'dart:convert';
+
+import 'package:shared_preferences/shared_preferences.dart';
+
 class User {
   String email;
+  String displayemail;
   String name;
   String token;
   String password;
@@ -31,6 +36,7 @@ class User {
   bool activelylookingforjob = false;
   User({
     this.email,
+    this.displayemail,
     this.name,
     this.token,
     this.id,
@@ -71,17 +77,46 @@ class User {
 
   setTemporaryAddress(String address) {
     this.temporaryaddress = address;
+    this.updateUserProfileAttributeDatabase('temporary_address', address);
+  }
+
+  setDisplayEmail(String displayemail) {
+    this.displayemail = displayemail;
+    this.updateUserAttributeDatabase('display_email', displayemail);
   }
 
   setMobileNumber(String number) {
     this.mobilenumber = number;
+    this.updateUserProfileAttributeDatabase('mobile_number', number);
   }
 
   setName(String name) {
     this.name = name;
+    this.updateUserAttributeDatabase('name', name);
   }
 
   setPicture(String pic) {
     this.picture = pic;
+    this.updateUserAttributeDatabase('main_image', pic);
+  }
+
+  updateUserAttributeDatabase(String key, dynamic value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    if (isLoggedIn) {
+      dynamic body = jsonDecode(prefs.getString('user'));
+      body['user'][key] = value;
+      await prefs.setString(key, body.toString());
+    }
+  }
+
+  updateUserProfileAttributeDatabase(String key, dynamic value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    if (isLoggedIn) {
+      dynamic body = jsonDecode(prefs.getString('user'));
+      body['user']['profile'][key] = value;
+      await prefs.setString(key, body.toString());
+    }
   }
 }

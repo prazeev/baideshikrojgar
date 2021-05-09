@@ -89,7 +89,7 @@ class LoginController extends GetxController {
         this.setEmail(deviceid + '-demo@sajhajobs.com');
         this.setPassword('facebook_sajhajobs');
         this.setId(deviceid);
-        this.setName('Baideshik Rojgar Pvt. Ltd.');
+        this.setName('Demo User');
         break;
       default:
         AwesomeDialog(
@@ -121,7 +121,7 @@ class LoginController extends GetxController {
       "Accept": "application/json",
     });
     var body = json.decode(res.body);
-    if (body['errors'] ?? false) {
+    if (body.containsKey('errors')) {
       this.loggedIn = false;
       this.loggingIn = false;
     } else {
@@ -136,7 +136,7 @@ class LoginController extends GetxController {
             "Accept": "application/json",
           });
       var body = json.decode(res.body);
-      if (body['errors'] ?? false) {
+      if (body.containsKey('errors')) {
         this.loggedIn = false;
         this.loggingIn = false;
         AwesomeDialog(
@@ -151,6 +151,7 @@ class LoginController extends GetxController {
         this.user = User(
           token: body['access_token'],
           email: body['user']['email'],
+          displayemail: body['user']['display_email'],
           name: body['user']['name'],
           picture: body['user']['main_image'],
           bio: body['user']['profile']['career_objective'],
@@ -193,6 +194,7 @@ class LoginController extends GetxController {
   }
 
   fbLogin() async {
+    await this.facebookLogin.logOut();
     final result = await this.facebookLogin.logIn(['email']);
     switch (result.status) {
       case FacebookLoginStatus.loggedIn:
@@ -201,8 +203,8 @@ class LoginController extends GetxController {
             'https://graph.facebook.com/v2.12/me?fields=picture.type(large),email,name&access_token=${token}');
         final profile = json.decode(graphResponse.body);
         var email = profile['email'];
-        if (email == '') {
-          email = '${profile['id']}@sajhajobs.com';
+        if (email == null) {
+          email = '${profile['id']}.facebook@sajhajobs.com';
         }
         this.user = User(
           email: email,
@@ -231,7 +233,7 @@ class LoginController extends GetxController {
           dialogType: DialogType.ERROR,
           animType: AnimType.BOTTOMSLIDE,
           title: 'Sorry, cannot login.',
-          desc: 'Some internal error occured.',
+          desc: result.errorMessage,
         )..show();
         break;
       default:

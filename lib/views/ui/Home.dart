@@ -65,6 +65,13 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  refreshHandler() async {
+    await this.syncHome();
+    await this.fetchHomeNews(
+      first: true,
+    );
+  }
+
   syncHome() async {
     dynamic data = await mainController.fetchAllDatasNonPaginated(path: "sync");
     setState(() {
@@ -86,6 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
     dynamic res = await this.mainController.apiController.getDataFuture(
           SAJHASABAL_URL + 'api/fetchPostsByCategories/' + category + '/5',
           externalurl: true,
+          ignoreOffline: this.mainController.isInternetConnected,
           silent: true,
         );
     if (first && mounted) {
@@ -163,37 +171,40 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       drawer: MainDrawer(),
-      body: ListView(
-        children: [
-          Stack(
-            children: [
-              Banners(),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                left: 0,
-                child: HomeMenu(),
-              )
-            ],
-          ),
-          Container(
-            padding: EdgeInsets.all(5),
-            child: HomeLatestJobs(
-              jobs: datas['latest_jobs'],
+      body: RefreshIndicator(
+        onRefresh: () => refreshHandler(),
+        child: ListView(
+          children: [
+            Stack(
+              children: [
+                Banners(),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  left: 0,
+                  child: HomeMenu(),
+                )
+              ],
             ),
-          ),
-          HomeOtherMenu(),
-          HomeManpowerEmbassy(
-            manpowers: datas['manpowers'],
-            embassies: datas['embassies'],
-          ),
-          HomeLTWorkPermit(),
-          HomeNews(
-            datas: newsdatas,
-          ),
-        ],
+            Container(
+              padding: EdgeInsets.all(5),
+              child: HomeLatestJobs(
+                jobs: datas['latest_jobs'],
+              ),
+            ),
+            HomeOtherMenu(),
+            HomeManpowerEmbassy(
+              manpowers: datas['manpowers'],
+              embassies: datas['embassies'],
+            ),
+            HomeLTWorkPermit(),
+            HomeNews(
+              datas: newsdatas,
+            ),
+          ],
+        ),
       ),
-      // floatingActionButton: GlobalRadio(),
+      floatingActionButton: GlobalRadio(),
     );
   }
 

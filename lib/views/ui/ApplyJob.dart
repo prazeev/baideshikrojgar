@@ -47,7 +47,7 @@ class _ApplyJobState extends State<ApplyJob> {
         text: mainController.user.mobilenumber,
       );
       emailcontroller = TextEditingController(
-        text: mainController.user.email,
+        text: mainController.user.displayemail,
       );
     });
   }
@@ -113,6 +113,10 @@ class _ApplyJobState extends State<ApplyJob> {
             .mainController
             .user
             .setTemporaryAddress(this.addresscontroller.text.trim());
+        this
+            .mainController
+            .user
+            .setDisplayEmail(this.emailcontroller.text.trim());
         Get.back(result: 'success');
         AwesomeDialog(
           context: Get.context,

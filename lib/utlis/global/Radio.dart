@@ -1,4 +1,7 @@
 import 'package:baideshikrojgar/controller/MainController.dart';
+import 'package:baideshikrojgar/utlis/constants/Constants.dart';
+import 'package:baideshikrojgar/views/radio/RadioWidget.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -9,13 +12,16 @@ class GlobalRadio extends StatelessWidget {
     return FloatingActionButton(
       elevation: 0.0,
       child: MainController.to.isRadioPlaying
-          ? new Icon(Icons.pause)
+          ? RadioPlayPauseButton()
           : new Icon(
               Icons.play_arrow,
             ),
       backgroundColor: Theme.of(context).primaryColor,
       onPressed: () {
-        MainController.to.setIsRadioPlaying(!mainController.isRadioPlaying);
+        if (!mainController.isRadioPlaying) {
+          Get.toNamed(RADIO_PAGE);
+          MainController.to.setIsRadioPlaying(!mainController.isRadioPlaying);
+        }
       },
     );
   }
