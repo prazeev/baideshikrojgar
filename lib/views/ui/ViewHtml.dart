@@ -1,8 +1,10 @@
 import 'package:baideshikrojgar/controller/MainController.dart';
 import 'package:baideshikrojgar/utlis/global/textView.dart';
+import 'package:baideshikrojgar/views/fragements/BannerAds.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ViewHtml extends StatefulWidget {
@@ -32,6 +34,9 @@ class _ViewHtmlState extends State<ViewHtml> {
       ),
       body: ListView(
         children: [
+          AppBannerAd(
+            adSize: AdSize.largeBanner,
+          ),
           Container(
             color: Colors.grey,
             width: double.infinity,

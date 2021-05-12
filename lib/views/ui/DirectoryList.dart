@@ -3,6 +3,7 @@ import 'package:baideshikrojgar/utlis/constants/Constants.dart';
 import 'package:baideshikrojgar/utlis/global/Helper.dart';
 import 'package:baideshikrojgar/utlis/global/textView.dart';
 import 'package:baideshikrojgar/utlis/global/textformfield.dart';
+import 'package:baideshikrojgar/views/fragements/BannerAds.dart';
 import 'package:baideshikrojgar/views/fragements/jobTile.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -92,6 +93,7 @@ class _DirectoryListState extends State<DirectoryList> {
                 this.fetchData(first: true);
               },
             ),
+            AppBannerAd(),
             Expanded(
               child: isGridView
                   ? GridView.builder(

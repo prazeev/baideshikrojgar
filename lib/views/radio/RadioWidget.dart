@@ -5,12 +5,15 @@ import 'dart:ui';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
+import 'package:baideshikrojgar/controller/MainController.dart';
 import 'package:baideshikrojgar/utlis/global/textView.dart';
+import 'package:baideshikrojgar/views/fragements/BannerAds.dart';
 import 'package:baideshikrojgar/views/fragements/jobTile.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -189,32 +192,46 @@ class RadioChannels extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: AudioService.queueStream,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.active) {
-            return SizedBox(
-              child: Text("A"),
-            );
-          }
-          final running = snapshot.data == null ? false : true;
-          return running
-              ? Column(
-                  children: snapshot.data
-                      .map<Widget>(
-                        (MediaItem mediaItem) => JobTile(
-                          bgcolor: Colors.white54,
-                          picture: mediaItem.artUri,
-                          title: mediaItem.title,
-                          abstract: mediaItem.album,
-                          divider: true,
-                          jobId: mediaItem.id,
-                          type: "radio",
-                        ),
-                      )
-                      .toList(),
-                )
-              : Text('Loading...');
-        });
+      stream: AudioService.currentMediaItemStream,
+      builder: (context, snapshot) {
+        final running = snapshot.data == null ? false : true;
+        return running
+            ? StreamBuilder(
+                stream: AudioService.queueStream,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState != ConnectionState.active) {
+                    return SizedBox(
+                      child: Text("A"),
+                    );
+                  }
+                  final running = snapshot.data == null ? false : true;
+                  return running
+                      ? Column(
+                          children: snapshot.data
+                              .map<Widget>(
+                                (MediaItem mediaItem) => JobTile(
+                                  bgcolor: Colors.white54,
+                                  picture: mediaItem.artUri,
+                                  title: mediaItem.title,
+                                  abstract:
+                                      AudioService.currentMediaItem.hashCode ==
+                                              mediaItem.hashCode
+                                          ? "Playing..."
+                                          : mediaItem.album,
+                                  divider: true,
+                                  jobId: mediaItem.id,
+                                  type: "radio",
+                                ),
+                              )
+                              .toList(),
+                        )
+                      : Text('Loading...');
+                })
+            : SizedBox(
+                height: 1,
+              );
+      },
+    );
   }
 }
 
@@ -286,8 +303,7 @@ class RadioSeekBar extends StatelessWidget {
                       builder: (context, snapshot) {
                         final mediaState = snapshot.data;
                         return SeekBar(
-                          duration:
-                              mediaState?.mediaItem?.duration ?? Duration.zero,
+                          duration: mediaState?.position ?? Duration.zero,
                           position: mediaState?.position ?? Duration.zero,
                           onChangeEnd: (newPosition) {
                             AudioService.seekTo(newPosition);
@@ -319,9 +335,10 @@ class _RadioWidgetState extends State<RadioWidget> {
         // Enable this if you want the Android service to exit the foreground state on pause.
         //androidStopForegroundOnPause: true,
         androidNotificationColor: 0xFF2196f3,
-        androidNotificationIcon: 'mipmap/ic_launcher',
+        androidNotificationIcon: 'mipmap/launcher_icon',
         androidEnableQueue: true,
       );
+      // MainController.to.setIsRadioPlaying(true);
     }
   }
 
@@ -331,6 +348,9 @@ class _RadioWidgetState extends State<RadioWidget> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          AppBannerAd(
+            adSize: AdSize.fullBanner,
+          ),
           RadioPlayingImage(queueStateStream: this._queueStateStream),
           SizedBox(
             height: 50,
@@ -355,6 +375,7 @@ class _RadioWidgetState extends State<RadioWidget> {
           ),
           RadioSeekBar(),
           RadioChannels(),
+          AppBannerAd(),
         ],
       ),
     );
@@ -799,13 +820,13 @@ class MediaLibrary {
           "https://www.sajhajobs.com/storage/photos/10333/Radio/60965b9b45241.png",
     ),
     MediaItem(
-      id: "http://live.itechnepal.com:8964/stream",
+      id: "http://streaming.softnep.net:8091/;stream.nsv&type=mp3&volume=50",
       album: "93.4 Mhz",
       title: "Annapurna FM",
       genre: "93.4 Mhz",
       // duration: Duration(milliseconds: 5739820),
       artUri:
-          "https://www.sajhajobs.com/storage/photos/10333/Radio/60965b981c9ab.png",
+          "https://www.sajhajobs.com/storage/photos/10333/Radio/609ade01d119f.png",
     ),
   ];
 
@@ -929,6 +950,8 @@ class TextPlayerTask extends BackgroundAudioTask {
       );
       _sleeper.interrupt();
       _tts.interrupt();
+
+      MainController.to.setIsRadioPlaying(false);
     } else {
       final session = await AudioSession.instance;
       // flutter_tts doesn't activate the session, so we do it here. This
@@ -944,6 +967,8 @@ class TextPlayerTask extends BackgroundAudioTask {
         );
         _sleeper.interrupt();
       }
+
+      MainController.to.setIsRadioPlaying(true);
     }
   }
 }

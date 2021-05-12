@@ -4,8 +4,10 @@ import 'package:baideshikrojgar/controller/MainController.dart';
 import 'package:baideshikrojgar/utlis/constants/Constants.dart';
 import 'package:baideshikrojgar/utlis/global/textView.dart';
 import 'package:baideshikrojgar/utlis/global/textformfield.dart';
+import 'package:baideshikrojgar/views/fragements/BannerAds.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:nice_button/NiceButton.dart';
 
 class LTWorkPermitSearch extends StatefulWidget {
@@ -50,6 +52,9 @@ class _LTWorkPermitSearchState extends State<LTWorkPermitSearch> {
       backgroundColor: Colors.black12,
       body: ListView(
         children: [
+          AppBannerAd(
+            adSize: AdSize.fullBanner,
+          ),
           Container(
             color: Colors.white,
             child: Row(

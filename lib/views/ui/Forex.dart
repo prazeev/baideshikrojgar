@@ -3,9 +3,11 @@ import 'dart:convert';
 import 'package:baideshikrojgar/controller/MainController.dart';
 import 'package:baideshikrojgar/utlis/constants/Constants.dart';
 import 'package:baideshikrojgar/utlis/global/textView.dart';
+import 'package:baideshikrojgar/views/fragements/BannerAds.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class Forex extends StatefulWidget {
   @override
@@ -53,6 +55,9 @@ class _ForexState extends State<Forex> {
               padding: const EdgeInsets.all(8),
               child: Column(
                 children: [
+                  AppBannerAd(
+                    adSize: AdSize.fullBanner,
+                  ),
                   Row(
                     children: [
                       TextFormatted(

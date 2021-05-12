@@ -6,9 +6,11 @@ import 'package:baideshikrojgar/utlis/global/Accodain.dart';
 import 'package:baideshikrojgar/utlis/global/Helper.dart';
 import 'package:baideshikrojgar/utlis/global/textView.dart';
 import 'package:baideshikrojgar/utlis/global/textformfield.dart';
+import 'package:baideshikrojgar/views/fragements/BannerAds.dart';
 import 'package:baideshikrojgar/views/fragements/jobTile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 import 'package:nice_button/NiceButton.dart';
@@ -141,6 +143,7 @@ class _ApplyJobState extends State<ApplyJob> {
           children: [
             ListView(
               children: [
+                AppBannerAd(adSize: AdSize.fullBanner),
                 TextFormatted(
                   text: "You are applying for:",
                 ),

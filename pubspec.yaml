@@ -2,7 +2,7 @@ name: baideshikrojgar
 description: A new Flutter project.
 
 
-version: 3.0.1+31
+version: 3.0.3+33
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -35,6 +35,8 @@ dependencies:
   just_audio: ^0.6.15+1
   flutter_tts: ^2.1.0
   device_info:
+  permission_handler:
+  google_mobile_ads:
   google_maps_flutter:
 
 

@@ -7,6 +7,7 @@ import 'package:baideshikrojgar/models/User.dart';
 import 'package:baideshikrojgar/utlis/constants/Constants.dart';
 import 'package:baideshikrojgar/utlis/global/Helper.dart';
 import 'package:baideshikrojgar/utlis/global/Radio.dart';
+import 'package:baideshikrojgar/views/fragements/BannerAds.dart';
 import 'package:baideshikrojgar/views/fragements/drawer.dart';
 import 'package:baideshikrojgar/views/fragements/homebanner.dart';
 import 'package:baideshikrojgar/views/fragements/homelatestjobs.dart';
@@ -17,6 +18,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class MainScreen extends StatelessWidget {
   @override
@@ -175,6 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onRefresh: () => refreshHandler(),
         child: ListView(
           children: [
+            AppBannerAd(adSize: AdSize.fullBanner),
             Stack(
               children: [
                 Banners(),

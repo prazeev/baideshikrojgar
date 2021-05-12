@@ -4,6 +4,7 @@ import 'package:baideshikrojgar/controller/MainController.dart';
 import 'package:baideshikrojgar/utlis/global/Helper.dart';
 import 'package:baideshikrojgar/utlis/global/shimmer.dart';
 import 'package:baideshikrojgar/utlis/global/textView.dart';
+import 'package:baideshikrojgar/views/fragements/BannerAds.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
@@ -61,6 +62,7 @@ class _ViewPostState extends State<ViewPost> {
       ),
       body: ListView(
         children: [
+          AppBannerAd(),
           Container(
             color: Colors.grey,
             width: double.infinity,

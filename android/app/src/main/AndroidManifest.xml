@@ -47,6 +47,9 @@
 
     <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="AIzaSyDXvp5t6flsYZp9HQhtvlVXsgng-iI8ftk"/>
+               <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-1216829600340360~1327750072"/>
     
 
     <activity android:name="com.facebook.FacebookActivity"

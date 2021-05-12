@@ -6,23 +6,34 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class GlobalRadio extends StatelessWidget {
-  final MainController mainController = Get.find();
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(
-      elevation: 0.0,
-      child: MainController.to.isRadioPlaying
-          ? RadioPlayPauseButton()
-          : new Icon(
-              Icons.play_arrow,
-            ),
-      backgroundColor: Theme.of(context).primaryColor,
-      onPressed: () {
-        if (!mainController.isRadioPlaying) {
-          Get.toNamed(RADIO_PAGE);
-          MainController.to.setIsRadioPlaying(!mainController.isRadioPlaying);
-        }
-      },
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        FloatingActionButton(
+          elevation: 0.0,
+          heroTag: null,
+          child: Image.asset('assets/images/news-icon.png'),
+          backgroundColor: Theme.of(context).primaryColor,
+          onPressed: () {
+            Get.toNamed(CATEGORY_NEWS_SAJHASABAL,
+                arguments: {"title": "समाचारहरु", "path": "updates_list"});
+          },
+        ),
+        SizedBox(
+          width: 20,
+        ),
+        FloatingActionButton(
+          elevation: 0.0,
+          heroTag: null,
+          child: Image.asset('assets/images/radio-icon.png'),
+          backgroundColor: Theme.of(context).primaryColor,
+          onPressed: () {
+            Get.toNamed(RADIO_PAGE);
+          },
+        ),
+      ],
     );
   }
 }

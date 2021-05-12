@@ -1,10 +1,14 @@
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:baideshikrojgar/controller/MainController.dart';
 import 'package:baideshikrojgar/views/fragements/jobTile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class ManpowerSinglePage extends StatefulWidget {
   @override
@@ -12,33 +16,66 @@ class ManpowerSinglePage extends StatefulWidget {
 }
 
 class _ManpowerSinglePageState extends State<ManpowerSinglePage> {
+  MainController mainController = Get.find();
+  Map<String, dynamic> details = Get.arguments;
+  String title = "View Post";
+  Map data = {};
+  bool isLoading = true;
+  bool permissionGranted = false;
   Completer<GoogleMapController> _controller = Completer();
-
-  static final CameraPosition _kGooglePlex = CameraPosition(
-      target: LatLng(37.42796133580664, -122.085749655962), zoom: 14.4746);
-
-  static final CameraPosition _kLake = CameraPosition(
-    bearing: 192.8334901395799,
-    target: LatLng(37.43296265331129, -122.08832357078792),
-    tilt: 59.440717697143555,
-    zoom: 19.151926040649414,
-  );
+  static final CameraPosition _kGooglePlex =
+      CameraPosition(target: LatLng(27.7172, 85.3240), zoom: 14.4746);
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    SystemChrome.setEnabledSystemUIOverlays([]);
+    setState(() {
+      title = details['title'];
+    });
+    fetchPost(details['id']);
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    SystemChrome.setEnabledSystemUIOverlays([
-      SystemUiOverlay.bottom,
-      SystemUiOverlay.top,
-    ]);
+  fetchPost(int id) async {
+    if (await Permission.location.request().isGranted) {
+      setState(() {
+        permissionGranted = true;
+      });
+    }
+    setState(() {
+      isLoading = true;
+    });
+    if (!permissionGranted) {
+      AwesomeDialog(
+        context: Get.context,
+        title: "Action needed",
+        desc:
+            "Please allow permission of accessing location. We need this because of using manpower location.",
+      );
+      return;
+    }
+    dynamic res = await this.mainController.apiController.getDataFuture(
+          'manpower/' + id.toString(),
+          ignoreOffline: this.mainController.isInternetConnected,
+        );
+    var d = json.decode(res.body);
+    setState(() {
+      data = d;
+      isLoading = false;
+    });
+
+    _goToTheLake();
+  }
+
+  _buildText(String text) {
+    return this.isLoading ? "Loading..." : text;
+  }
+
+  _getData(dynamic data, String key) {
+    if (data != null && data.containsKey(key)) {
+      return _buildText(data[key]);
+    } else {
+      return "Loading...";
+    }
   }
 
   @override
@@ -67,13 +104,12 @@ class _ManpowerSinglePageState extends State<ManpowerSinglePage> {
                 children: [
                   JobTile(
                     height: 100,
-                    title: "ABC Manpower",
-                    location: "Kaushaltar, Bkt",
+                    title: _getData(data, 'name'),
+                    location: _getData(data, 'address'),
                     bgcolor: Colors.transparent,
-                    contact: "A",
+                    contact: _getData(data, 'contact'),
                     canCall: true,
-                    abstract:
-                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum",
+                    abstract: _getData(data, 'abstract'),
                   )
                 ],
               ),
@@ -89,8 +125,22 @@ class _ManpowerSinglePageState extends State<ManpowerSinglePage> {
     );
   }
 
+  double _parseLatLang(dynamic data) {
+    double d = double.parse(data);
+    return d;
+  }
+
   Future<void> _goToTheLake() async {
-    final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
+    if (!this.isLoading) {
+      GoogleMapController controller = await _controller.future;
+      CameraPosition _kLake = CameraPosition(
+        bearing: 192.8334901395799,
+        target: LatLng(
+            _parseLatLang(data['latitude']), _parseLatLang(data['longitude'])),
+        tilt: 59.440717697143555,
+        zoom: 19.151926040649414,
+      );
+      controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
+    }
   }
 }

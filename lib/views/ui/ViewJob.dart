@@ -5,6 +5,7 @@ import 'package:baideshikrojgar/utlis/constants/Constants.dart';
 import 'package:baideshikrojgar/utlis/global/Helper.dart';
 import 'package:baideshikrojgar/utlis/global/shimmer.dart';
 import 'package:baideshikrojgar/utlis/global/textView.dart';
+import 'package:baideshikrojgar/views/fragements/BannerAds.dart';
 import 'package:baideshikrojgar/views/fragements/jobTile.dart';
 import 'package:baideshikrojgar/views/ui/LTWorkPermitSearch.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -13,6 +14,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ViewJob extends StatefulWidget {
@@ -146,6 +148,7 @@ class _ViewJobState extends State<ViewJob> {
           ),
           SliverList(
             delegate: SliverChildListDelegate([
+              AppBannerAd(adSize: AdSize.leaderboard),
               Container(
                 color: Theme.of(context).primaryColor.withOpacity(0.08),
                 child: getJobDetails(),
@@ -274,6 +277,8 @@ class _ViewJobState extends State<ViewJob> {
             location: data['manpower']['location'],
             contact: data['manpower']['contact'],
             fontSize: 14,
+            type: 'manpowerjobs',
+            jobId: data['manpower']['id'],
             canCall: true,
           ),
         ],

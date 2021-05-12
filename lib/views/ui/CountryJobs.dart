@@ -3,10 +3,12 @@ import 'package:baideshikrojgar/utlis/constants/Constants.dart';
 import 'package:baideshikrojgar/utlis/global/Helper.dart';
 import 'package:baideshikrojgar/utlis/global/textView.dart';
 import 'package:baideshikrojgar/utlis/global/textformfield.dart';
+import 'package:baideshikrojgar/views/fragements/BannerAds.dart';
 import 'package:baideshikrojgar/views/fragements/jobTile.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class CountryJobs extends StatefulWidget {
   @override
@@ -97,6 +99,9 @@ class _CountryJobsState extends State<CountryJobs> {
             onTextChange: (String text) {
               this.fetchData(first: true);
             },
+          ),
+          AppBannerAd(
+            adSize: AdSize.fullBanner,
           ),
           Expanded(
             child: isGridView

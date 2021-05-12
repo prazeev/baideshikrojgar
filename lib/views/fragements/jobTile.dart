@@ -20,7 +20,7 @@ class JobTile extends StatefulWidget {
       dateField,
       contact;
   final Color bgcolor;
-  final bool isBigImage, bigTitle, divider, canCall;
+  final bool isBigImage, bigTitle, divider, canCall, tyle;
   final dynamic jobId, jobCount;
   final double height, fontSize;
   JobTile({
@@ -34,6 +34,7 @@ class JobTile extends StatefulWidget {
     this.contact = '',
     this.height = 70.00,
     this.isBigImage = false,
+    this.tyle = false,
     this.abstract = '',
     this.jobId = 0,
     this.jobCount = 0,
@@ -44,7 +45,7 @@ class JobTile extends StatefulWidget {
     this.html = '',
     this.divider = false,
     this.fontSize = 13,
-    this.bgcolor = Colors.white,
+    this.bgcolor = Colors.transparent,
   });
   @override
   _JobTileState createState() => _JobTileState();
@@ -53,7 +54,7 @@ class JobTile extends StatefulWidget {
 class _JobTileState extends State<JobTile> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: () {
         if (this.widget.type == "country") {
           Get.toNamed(COUNTRIES_JOBS, arguments: {
@@ -81,7 +82,10 @@ class _JobTileState extends State<JobTile> {
           AudioService.skipToQueueItem(this.widget.jobId);
         }
         if (this.widget.type == "manpower") {
-          Get.toNamed(MANPOWER_SINGLE);
+          Get.toNamed(MANPOWER_SINGLE, arguments: {
+            "id": this.widget.jobId,
+            "title": this.widget.title,
+          });
         }
         if (this.widget.type == "manpowerjobs") {
           Get.toNamed(MANPOWER_JOBS, arguments: {
