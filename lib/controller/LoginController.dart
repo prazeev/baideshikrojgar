@@ -21,6 +21,7 @@ class LoginController extends GetxController {
   GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: [
       'email',
+      'https://www.googleapis.com/auth/contacts.readonly',
     ],
   );
   User user = User();

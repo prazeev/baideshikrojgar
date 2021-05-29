@@ -1,0 +1,41 @@
+{
+  "project_info": {
+    "project_number": "464412439031",
+    "firebase_url": "https://baideshik-rojgar.firebaseio.com",
+    "project_id": "baideshik-rojgar",
+    "storage_bucket": "baideshik-rojgar.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:464412439031:android:bcfd58f18239e0437c7ef2",
+        "android_client_info": {
+          "package_name": "com.sajhajobs.project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "464412439031-013mbmnrmnvos4desjhdndcmbpqvkq6n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCheqHMUjc8pjCzDGUYuo5o_AvqwQTmBSI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "464412439031-013mbmnrmnvos4desjhdndcmbpqvkq6n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-1216829600340360~1327750072"
+    }
+  ],
+  "configuration_version": "1"
+}

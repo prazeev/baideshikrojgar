@@ -5,6 +5,7 @@ import 'package:baideshikrojgar/models/User.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class MainController extends GetxController {
   // Logged in user
@@ -21,6 +22,33 @@ class MainController extends GetxController {
   setIsInternetConnected(bool val) {
     this.isInternetConnected = val;
     update();
+  }
+
+  @override
+  onInit() {
+    super.onInit();
+    this.initOneSignal();
+  }
+
+  Future<void> initOneSignal() async {
+    OneSignal.shared.init(
+      "23e8fa93-7674-49ca-b4d9-1d9c42095dfc",
+      iOSSettings: {
+        OSiOSSettings.autoPrompt: false,
+        OSiOSSettings.inAppLaunchUrl: false
+      },
+    );
+    OneSignal.shared
+        .setInFocusDisplayType(OSNotificationDisplayType.notification);
+    await OneSignal.shared
+        .promptUserForPushNotificationPermission(fallbackToSettings: true);
+    OneSignal.shared.setEmail(email: "abcd@gmail.com");
+
+    OneSignal.shared
+        .setNotificationReceivedHandler((OSNotification notification) {
+      // will be called whenever a notification is received
+      print("NOTIFICATION" + notifications.toString());
+    });
   }
 
   List notifications = [
