@@ -1,40 +1,54 @@
 {
   "project_info": {
-    "project_number": "464412439031",
-    "firebase_url": "https://baideshik-rojgar.firebaseio.com",
-    "project_id": "baideshik-rojgar",
-    "storage_bucket": "baideshik-rojgar.appspot.com"
+    "project_number": "966372484507",
+    "project_id": "baideshik-rojgar-updated",
+    "storage_bucket": "baideshik-rojgar-updated.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:464412439031:android:bcfd58f18239e0437c7ef2",
+        "mobilesdk_app_id": "1:966372484507:android:fb9d050b5ad4ebe1eaad3e",
         "android_client_info": {
           "package_name": "com.sajhajobs.project"
         }
       },
       "oauth_client": [
         {
-          "client_id": "464412439031-013mbmnrmnvos4desjhdndcmbpqvkq6n.apps.googleusercontent.com",
+          "client_id": "966372484507-i4gtpl7l8l9aug8ge7kn23fccfgqnk59.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sajhajobs.project",
+            "certificate_hash": "75d5e8078dbe30cbc98ac6416febf4610d64cab8"
+          }
+        },
+        {
+          "client_id": "966372484507-udd5ov3r53vbj404jjj7a65j43kklpnh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sajhajobs.project",
+            "certificate_hash": "3c76041d94ba91568366a8e086db1363a3f43dfe"
+          }
+        },
+        {
+          "client_id": "966372484507-t4q0uuk4hvgsi660j9m4q62r234fq9to.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCheqHMUjc8pjCzDGUYuo5o_AvqwQTmBSI"
+          "current_key": "AIzaSyA9BHEQbarpeQTd08HHyEcH4e7O6CpgT-I"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "464412439031-013mbmnrmnvos4desjhdndcmbpqvkq6n.apps.googleusercontent.com",
+              "client_id": "966372484507-t4q0uuk4hvgsi660j9m4q62r234fq9to.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
         }
-      },
-      "admob_app_id": "ca-app-pub-1216829600340360~1327750072"
+      }
     }
   ],
   "configuration_version": "1"

@@ -2,7 +2,7 @@ name: baideshikrojgar
 description: A new Flutter project.
 
 
-version: 3.0.4+34
+version: 3.0.5+35
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -27,6 +27,7 @@ dependencies:
   flutter_countdown_timer: ^3.0.1
   multi_select_flutter: ^3.1.8
   flutter_signin_button: ^1.1.0
+  firebase_auth:
   google_sign_in: ^4.5.9
   shimmer: ^1.1.2
   connectivity: ^2.0.2

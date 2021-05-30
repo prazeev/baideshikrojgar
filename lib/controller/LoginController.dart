@@ -18,12 +18,7 @@ class LoginController extends GetxController {
   String medium = 'normal';
   GoogleSignInAccount googleUser;
   FacebookLogin facebookLogin = FacebookLogin();
-  GoogleSignIn _googleSignIn = GoogleSignIn(
-    scopes: [
-      'email',
-      'https://www.googleapis.com/auth/contacts.readonly',
-    ],
-  );
+  GoogleSignIn _googleSignIn = GoogleSignIn();
   User user = User();
   bool loggingIn = false, loggedIn = false;
   var setLoggedIn, setLoggingIn;
@@ -140,6 +135,7 @@ class LoginController extends GetxController {
       if (body.containsKey('errors')) {
         this.loggedIn = false;
         this.loggingIn = false;
+        print(body.toString());
         AwesomeDialog(
           context: Get.context,
           title: "Error",
@@ -246,15 +242,21 @@ class LoginController extends GetxController {
   googleLogin() async {
     try {
       this.googleUser = await _googleSignIn.signIn();
-      print(
-        "Email: " + this.googleUser.toString(),
+      this.user = User(
+        email: this.googleUser.email,
+        picture: this.googleUser.photoUrl,
+        password: 'gmail_sajhajobs',
+        id: this.googleUser.id,
+        name: this.googleUser.displayName,
       );
-      if (googleUser != null) {
-        this.setEmail(googleUser.email);
-        this.setPassword('gmail_sajhajobs');
-      }
     } catch (error) {
-      print("bashu" + error.toString());
+      AwesomeDialog(
+        context: Get.context,
+        dialogType: DialogType.ERROR,
+        animType: AnimType.BOTTOMSLIDE,
+        title: 'Sorry, cannot login.',
+        desc: error.toString(),
+      )..show();
     }
   }
 }

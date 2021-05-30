@@ -42,7 +42,7 @@ class MainController extends GetxController {
         .setInFocusDisplayType(OSNotificationDisplayType.notification);
     await OneSignal.shared
         .promptUserForPushNotificationPermission(fallbackToSettings: true);
-    OneSignal.shared.setEmail(email: "abcd@gmail.com");
+    OneSignal.shared.setEmail(email: this.user.email);
 
     OneSignal.shared
         .setNotificationReceivedHandler((OSNotification notification) {
