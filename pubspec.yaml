@@ -2,7 +2,7 @@ name: baideshikrojgar
 description: A new Flutter project.
 
 
-version: 3.0.5+35
+version: 3.0.6+36
 
 environment:
   sdk: ">=2.7.0 <3.0.0"

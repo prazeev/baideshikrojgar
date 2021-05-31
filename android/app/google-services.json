@@ -14,19 +14,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "966372484507-i4gtpl7l8l9aug8ge7kn23fccfgqnk59.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.sajhajobs.project",
-            "certificate_hash": "75d5e8078dbe30cbc98ac6416febf4610d64cab8"
-          }
-        },
-        {
-          "client_id": "966372484507-udd5ov3r53vbj404jjj7a65j43kklpnh.apps.googleusercontent.com",
+          "client_id": "966372484507-idlg7cmo0aeh6krbml82r3kv26gbgiap.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.sajhajobs.project",
             "certificate_hash": "3c76041d94ba91568366a8e086db1363a3f43dfe"
+          }
+        },
+        {
+          "client_id": "966372484507-k95duikgt5kn12topf7ejq0dkkb8iv24.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sajhajobs.project",
+            "certificate_hash": "14c90f8d1504869f6049fb65a2d1b3b5123fd027"
           }
         },
         {
@@ -48,7 +48,8 @@
             }
           ]
         }
-      }
+      },
+      "admob_app_id": "ca-app-pub-1216829600340360~1327750072"
     }
   ],
   "configuration_version": "1"

@@ -1,10 +1,8 @@
-import 'dart:io';
-
 import 'package:baideshikrojgar/controller/MainController.dart';
 import 'package:baideshikrojgar/utlis/constants/Constants.dart';
 import 'package:baideshikrojgar/utlis/global/Accodain.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:get/get.dart';
 import 'package:package_info/package_info.dart';
@@ -469,6 +467,10 @@ class _MainDrawerState extends State<MainDrawer> {
                   onTap: () async {
                     FacebookLogin facebookLogin = FacebookLogin();
                     facebookLogin.logOut();
+                    GoogleSignIn _googleSignIn = GoogleSignIn();
+                    if (await _googleSignIn.isSignedIn()) {
+                      _googleSignIn.signOut();
+                    }
                     SharedPreferences sharedPreferences =
                         await SharedPreferences.getInstance();
                     await sharedPreferences.remove('isLoggedIn');
