@@ -126,7 +126,7 @@ class _ManpowerSinglePageState extends State<ManpowerSinglePage> {
   }
 
   double _parseLatLang(dynamic data) {
-    double d = double.parse(data);
+    double d = double.parse(data.toString());
     return d;
   }
 

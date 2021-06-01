@@ -67,16 +67,22 @@ class _ViewHtmlState extends State<ViewHtml> {
               ],
             ),
           ),
-          Container(
-            color: Colors.white,
-            padding: EdgeInsets.all(5),
-            child: Html(
-                data: data['html'],
-                onLinkTap: (String url) async {
-                  if (await canLaunch(url)) {
-                    await launch(url);
-                  }
-                }),
+          InteractiveViewer(
+            panEnabled: false, // Set it to false to prevent panning.
+            boundaryMargin: EdgeInsets.all(80),
+            minScale: 0.5,
+            maxScale: 4,
+            child: Container(
+              color: Colors.white,
+              padding: EdgeInsets.all(5),
+              child: Html(
+                  data: data['html'],
+                  onLinkTap: (String url) async {
+                    if (await canLaunch(url)) {
+                      await launch(url);
+                    }
+                  }),
+            ),
           )
         ],
       ),

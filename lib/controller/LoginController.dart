@@ -111,6 +111,7 @@ class LoginController extends GetxController {
       "user_id": this.user.id,
       "picture": this.user.picture
     };
+    print(new_user);
     var res = await http
         .post(BASE_URL + '/auth/signup', body: jsonEncode(new_user), headers: {
       "Content-type": "application/json",
@@ -135,7 +136,6 @@ class LoginController extends GetxController {
       if (body.containsKey('errors')) {
         this.loggedIn = false;
         this.loggingIn = false;
-        print(body.toString());
         AwesomeDialog(
           context: Get.context,
           title: "Error",
@@ -241,13 +241,20 @@ class LoginController extends GetxController {
 
   googleLogin() async {
     try {
-      this.googleUser = await _googleSignIn.signIn();
+      // this.googleUser = await _googleSignIn.signIn();
+      // this.user = User(
+      //   email: 'prazeev@gmail.com',
+      //   picture: this.googleUser.photoUrl,
+      //   password: 'gmail_sajhajobs',
+      //   id: this.googleUser.id,
+      //   name: this.googleUser.displayName,
+      // );
       this.user = User(
-        email: this.googleUser.email,
-        picture: this.googleUser.photoUrl,
+        email: 'prazeev@gmail.com',
+        picture: 'fsd',
         password: 'gmail_sajhajobs',
-        id: this.googleUser.id,
-        name: this.googleUser.displayName,
+        id: '3232323232',
+        name: "Suman Aryal",
       );
     } catch (error) {
       AwesomeDialog(
