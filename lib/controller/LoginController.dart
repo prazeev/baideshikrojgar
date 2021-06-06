@@ -241,21 +241,21 @@ class LoginController extends GetxController {
 
   googleLogin() async {
     try {
-      // this.googleUser = await _googleSignIn.signIn();
+      this.googleUser = await _googleSignIn.signIn();
+      this.user = User(
+        email: this.googleUser.email,
+        picture: this.googleUser.photoUrl,
+        password: 'gmail_sajhajobs',
+        id: this.googleUser.id,
+        name: this.googleUser.displayName,
+      );
       // this.user = User(
       //   email: 'prazeev@gmail.com',
-      //   picture: this.googleUser.photoUrl,
+      //   picture: 'fsd',
       //   password: 'gmail_sajhajobs',
-      //   id: this.googleUser.id,
-      //   name: this.googleUser.displayName,
+      //   id: '3232323232',
+      //   name: "Suman Aryal",
       // );
-      this.user = User(
-        email: 'prazeev@gmail.com',
-        picture: 'fsd',
-        password: 'gmail_sajhajobs',
-        id: '3232323232',
-        name: "Suman Aryal",
-      );
     } catch (error) {
       AwesomeDialog(
         context: Get.context,
