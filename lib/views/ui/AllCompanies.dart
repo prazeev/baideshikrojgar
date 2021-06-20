@@ -6,16 +6,16 @@ import 'package:baideshikrojgar/views/fragements/BannerAds.dart';
 import 'package:baideshikrojgar/views/fragements/jobTile.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-class AllManpower extends StatefulWidget {
+class AllCompanies extends StatefulWidget {
   @override
-  _AllManpowerState createState() => _AllManpowerState();
+  _AllCompaniesState createState() => _AllCompaniesState();
 }
 
-class _AllManpowerState extends State<AllManpower> {
+class _AllCompaniesState extends State<AllCompanies> {
   MainController mainController = Get.find();
   GlobalKey _scaffoldKey;
   ScrollController scrollController = ScrollController();
@@ -43,13 +43,14 @@ class _AllManpowerState extends State<AllManpower> {
     dynamic data = await this.mainController.fetchAllDatas(
           key: 'manpowers',
           first: first,
-          path: first ? 'manpowers/' + this.searchTextController.text : '',
+          path: first ? 'companies/' + this.searchTextController.text : '',
         );
     if (first) {
       setState(() {
         datas = [];
       });
     }
+    print(data);
     setState(() {
       datas = [...datas, ...data];
     });
@@ -67,27 +68,27 @@ class _AllManpowerState extends State<AllManpower> {
       key: _scaffoldKey,
       appBar: AppBar(
           title: TextFormatted(
-            text: "All Manpowers",
+            text: "All Companies",
           ),
           actions: <Widget>[
-            Row(
-              children: <Widget>[
-                IconButton(
-                  icon: !isGridView ? Icon(Icons.grid_on) : Icon(Icons.list),
-                  onPressed: () {
-                    setState(() {
-                      isGridView = !isGridView;
-                    });
-                  },
-                ),
-              ],
-            ),
+            // Row(
+            //   children: <Widget>[
+            //     IconButton(
+            //       icon: !isGridView ? Icon(Icons.grid_on) : Icon(Icons.list),
+            //       onPressed: () {
+            //         setState(() {
+            //           isGridView = !isGridView;
+            //         });
+            //       },
+            //     ),
+            //   ],
+            // ),
           ]),
       body: Column(
         children: [
           CustomTextField(
             elevation: 1,
-            hint: "Search manpowers",
+            hint: "Search companies",
             radius: 0,
             textEditingController: searchTextController,
             onTextChange: (String text) {
@@ -133,11 +134,10 @@ class _AllManpowerState extends State<AllManpower> {
     return JobTile(
       height: 90,
       jobId: item['id'],
-      type: 'manpowerjobs',
-      picture: getFirstImage(item['logo']),
-      title: item['name'],
-      location: item['location'],
-      contact: item['contact'],
+      type: 'companiesjob',
+      picture: item['main_image'],
+      title: item['title'],
+      html: item['description'],
       additionalheight: 60,
       otherChildWidget: Column(
         children: [
@@ -152,7 +152,6 @@ class _AllManpowerState extends State<AllManpower> {
           )
         ],
       ),
-      jobCount: item['active_jobs_count'],
       childWidget: IgnorePointer(
         child: Row(
           children: [
@@ -181,6 +180,14 @@ class _AllManpowerState extends State<AllManpower> {
                 fontSize: 11,
               ),
             ),
+            TextFormatted(
+              text: item['reviews_count'].toString() + " reviews",
+              textStyle: TextStyle(
+                color: Colors.grey,
+                fontStyle: FontStyle.italic,
+                fontSize: 11,
+              ),
+            ),
           ],
         ),
       ),
@@ -194,13 +201,13 @@ class _AllManpowerState extends State<AllManpower> {
           children: [
             CachedNetworkImage(
               height: 100,
-              imageUrl: getFirstImage(item['logo']),
+              imageUrl: item['main_image'],
             ),
             Row(
               children: <Widget>[
                 Expanded(
                   child: TextFormatted(
-                    text: item['name'],
+                    text: item['title'],
                     maxline: 5,
                     textStyle: TextStyle(
                       fontWeight: FontWeight.w600,
@@ -211,47 +218,8 @@ class _AllManpowerState extends State<AllManpower> {
                 ),
               ],
             ),
-            Expanded(
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.location_city,
-                    color: Colors.green,
-                    size: 11,
-                  ),
-                  TextFormatted(
-                    text: "Location: ",
-                    textStyle: TextStyle(
-                      fontWeight: FontWeight.w300,
-                      fontSize: 11,
-                    ),
-                  ),
-                  TextFormatted(
-                    text: item['location'],
-                    textStyle: TextStyle(
-                      fontWeight: FontWeight.w300,
-                      fontSize: 11,
-                    ),
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
-        Positioned(
-          right: 0,
-          child: Container(
-            color: Theme.of(context).primaryColor,
-            child: Center(
-              child: TextFormatted(
-                text: "Jobs: " + item['active_jobs_count'].toString(),
-                textStyle: TextStyle(color: Colors.white, fontSize: 10),
-              ),
-            ),
-          ),
-          height: 20,
-          width: 100,
-        )
       ],
     );
   }

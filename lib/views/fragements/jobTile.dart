@@ -3,6 +3,7 @@ import 'package:baideshikrojgar/utlis/constants/Constants.dart';
 import 'package:baideshikrojgar/utlis/global/textView.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -19,13 +20,16 @@ class JobTile extends StatefulWidget {
       html,
       dateField,
       contact;
+  final Widget otherChildWidget;
   final Color bgcolor;
   final bool isBigImage, bigTitle, divider, canCall, tyle;
   final dynamic jobId, jobCount;
-  final double height, fontSize;
+  final double height, fontSize, additionalheight;
+  final Widget childWidget;
   JobTile({
     this.picture = '',
     this.smallpicture = '',
+    this.otherChildWidget,
     this.title = '',
     this.salarymax = '',
     this.salarymin = '',
@@ -41,6 +45,8 @@ class JobTile extends StatefulWidget {
     this.dateField = '',
     this.type = 'job',
     this.bigTitle = false,
+    this.childWidget,
+    this.additionalheight = 0,
     this.canCall = false,
     this.html = '',
     this.divider = false,
@@ -92,7 +98,50 @@ class _JobTileState extends State<JobTile> {
             "manpower": this.widget.title,
             "id": this.widget.jobId,
             "widget": JobTile(
-              height: 100,
+              height: this.widget.height + this.widget.additionalheight,
+              childWidget: Row(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      this.widget.childWidget,
+                      this.widget.otherChildWidget == null
+                          ? Container()
+                          : this.widget.otherChildWidget
+                    ],
+                  ),
+                  InkWell(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.directions,
+                              color: Colors.white,
+                              size: 10,
+                            ),
+                            SizedBox(
+                              width: 3,
+                            ),
+                            TextFormatted(
+                              text: "Go to direction",
+                              textStyle: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               title: this.widget.title,
               abstract: this.widget.abstract,
               location: this.widget.location,
@@ -101,6 +150,39 @@ class _JobTileState extends State<JobTile> {
               jobId: this.widget.jobId,
               canCall: true,
               type: "manpower",
+            ),
+          });
+        }
+        if (this.widget.type == "companiesjob") {
+          Get.toNamed(COMPANY_JOBS, arguments: {
+            "company": this.widget.title,
+            "id": this.widget.jobId,
+            "widget": Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                JobTile(
+                  height: this.widget.height + this.widget.additionalheight,
+                  childWidget: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      this.widget.childWidget,
+                      this.widget.otherChildWidget == null
+                          ? Container()
+                          : this.widget.otherChildWidget
+                    ],
+                  ),
+                  title: this.widget.title,
+                  abstract: this.widget.abstract,
+                  location: this.widget.location,
+                  contact: this.widget.contact,
+                  picture: this.widget.picture,
+                  jobId: this.widget.jobId,
+                  canCall: true,
+                  type: "manpower",
+                ),
+              ],
             ),
           });
         }
@@ -142,9 +224,7 @@ class _JobTileState extends State<JobTile> {
                         errorWidget: (context, url, error) => Icon(Icons.error),
                         // fit: BoxFit.cover,
                       )
-                    : SizedBox(
-                        height: 1,
-                      ),
+                    : Container(),
                 this.widget.smallpicture != ''
                     ? CachedNetworkImage(
                         imageUrl: this.widget.smallpicture,
@@ -164,9 +244,7 @@ class _JobTileState extends State<JobTile> {
                         errorWidget: (context, url, error) => Icon(Icons.error),
                         // fit: BoxFit.cover,
                       )
-                    : SizedBox(
-                        height: 1,
-                      ),
+                    : Container(),
                 Expanded(
                   child: Container(
                     padding: EdgeInsets.only(
@@ -219,9 +297,7 @@ class _JobTileState extends State<JobTile> {
                                   )
                                 ],
                               )
-                            : SizedBox(
-                                height: 1,
-                              ),
+                            : Container(),
                         this.widget.abstract != ''
                             ? Row(
                                 children: [
@@ -237,9 +313,7 @@ class _JobTileState extends State<JobTile> {
                                   ),
                                 ],
                               )
-                            : SizedBox(
-                                height: 1,
-                              ),
+                            : Container(),
                         this.widget.location != ''
                             ? Row(
                                 children: [
@@ -260,9 +334,7 @@ class _JobTileState extends State<JobTile> {
                                   ),
                                 ],
                               )
-                            : SizedBox(
-                                height: 1,
-                              ),
+                            : Container(),
                         this.widget.contact != ''
                             ? Row(
                                 children: [
@@ -283,9 +355,7 @@ class _JobTileState extends State<JobTile> {
                                   ),
                                 ],
                               )
-                            : SizedBox(
-                                height: 1,
-                              ),
+                            : Container(),
                         this.widget.daysLeft.length > 0
                             ? Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
@@ -308,9 +378,7 @@ class _JobTileState extends State<JobTile> {
                                   ),
                                 ],
                               )
-                            : SizedBox(
-                                height: 1,
-                              ),
+                            : Container(),
                         this.widget.dateField.length > 0
                             ? Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
@@ -325,9 +393,10 @@ class _JobTileState extends State<JobTile> {
                                   ),
                                 ],
                               )
-                            : SizedBox(
-                                height: 1,
-                              ),
+                            : Container(),
+                        this.widget.childWidget != null
+                            ? this.widget.childWidget
+                            : Container(),
                       ],
                     ),
                   ),

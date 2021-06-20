@@ -3,12 +3,14 @@ import 'package:baideshikrojgar/utlis/constants/Constants.dart';
 import 'package:baideshikrojgar/views/fragements/experiences/experiences.dart';
 import 'package:baideshikrojgar/views/radio/RadioScreen.dart';
 import 'package:baideshikrojgar/views/ui/AllCatrgories.dart';
+import 'package:baideshikrojgar/views/ui/AllCompanies.dart';
 import 'package:baideshikrojgar/views/ui/AllCountry.dart';
 import 'package:baideshikrojgar/views/ui/AllJobs.dart';
 import 'package:baideshikrojgar/views/ui/AllManpower.dart';
 import 'package:baideshikrojgar/views/ui/ApplyJob.dart';
 import 'package:baideshikrojgar/views/ui/CategoriesJobs.dart';
 import 'package:baideshikrojgar/views/ui/CategoryDataSajhasabal.dart';
+import 'package:baideshikrojgar/views/ui/CompanyJobs.dart';
 import 'package:baideshikrojgar/views/ui/CountryJobs.dart';
 import 'package:baideshikrojgar/views/ui/CountryWiseInfo.dart';
 import 'package:baideshikrojgar/views/ui/DirectoryList.dart';
@@ -79,6 +81,14 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: ALL_JOBS,
           page: () => AllJobs(),
+        ),
+        GetPage(
+          name: ALL_COMPANIES,
+          page: () => AllCompanies(),
+        ),
+        GetPage(
+          name: COMPANY_JOBS,
+          page: () => CompanyJobs(),
         ),
         GetPage(
           name: VIEW_JOB,

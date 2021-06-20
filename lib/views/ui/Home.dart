@@ -53,6 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
     "latest_jobs": [],
     "manpowers": [],
     "embassies": [],
+    "companies": [],
   };
   List newsdatas = [];
   @override
@@ -76,6 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   syncHome() async {
     dynamic data = await mainController.fetchAllDatasNonPaginated(path: "sync");
+    print(data);
     setState(() {
       datas = {
         "latest_jobs": data['latest_jobs']['data']
@@ -86,6 +88,9 @@ class _HomeScreenState extends State<HomeScreen> {
             .toList(),
         "embassies": data['locations']['data']
             .map((item) => processEmbassy(item))
+            .toList(),
+        "companies": data['companies']['data']
+            .map((item) => processCompany(item))
             .toList(),
       };
     });
@@ -131,6 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
       "abstract": item['abstract'],
       "newjob": item['active_jobs_count'],
       "id": item['id'],
+      "average": item['average'],
     };
   }
 
@@ -141,6 +147,17 @@ class _HomeScreenState extends State<HomeScreen> {
       "description_en": item['description_np'],
       "location": item['address'],
       "contact": item['contact'],
+    };
+  }
+
+  processCompany(dynamic item) {
+    return {
+      "picture": item['main_image'],
+      "id": item['id'],
+      "title": item['title'],
+      "abstract": item['abstract'],
+      "description": item['description'],
+      "average": item['average'],
     };
   }
 
@@ -199,6 +216,7 @@ class _HomeScreenState extends State<HomeScreen> {
             HomeManpowerEmbassy(
               manpowers: datas['manpowers'],
               embassies: datas['embassies'],
+              companies: datas['companies'],
             ),
             HomeLTWorkPermit(),
             HomeNews(

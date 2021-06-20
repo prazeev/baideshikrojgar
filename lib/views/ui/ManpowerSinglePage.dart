@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:baideshikrojgar/controller/MainController.dart';
+import 'package:baideshikrojgar/utlis/global/Helper.dart';
 import 'package:baideshikrojgar/views/fragements/jobTile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class _ManpowerSinglePageState extends State<ManpowerSinglePage> {
   Completer<GoogleMapController> _controller = Completer();
   static final CameraPosition _kGooglePlex =
       CameraPosition(target: LatLng(27.7172, 85.3240), zoom: 14.4746);
-
+  Set<Marker> markers = Set();
   @override
   void initState() {
     super.initState();
@@ -81,14 +82,18 @@ class _ManpowerSinglePageState extends State<ManpowerSinglePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+      ),
       body: Stack(
         children: [
           GoogleMap(
-            mapType: MapType.hybrid,
+            mapType: MapType.normal,
             initialCameraPosition: _kGooglePlex,
             onMapCreated: (GoogleMapController controller) {
               _controller.complete(controller);
             },
+            markers: this.markers,
           ),
           Positioned(
             top: 0,
@@ -103,7 +108,8 @@ class _ManpowerSinglePageState extends State<ManpowerSinglePage> {
               child: Column(
                 children: [
                   JobTile(
-                    height: 100,
+                    type: 'null',
+                    height: 120,
                     title: _getData(data, 'name'),
                     location: _getData(data, 'address'),
                     bgcolor: Colors.transparent,
@@ -132,6 +138,24 @@ class _ManpowerSinglePageState extends State<ManpowerSinglePage> {
 
   Future<void> _goToTheLake() async {
     if (!this.isLoading) {
+      Marker resultMarker = Marker(
+        markerId: MarkerId('location'),
+        infoWindow: InfoWindow(
+          title: this.title,
+        ),
+        position: LatLng(
+          _parseLatLang(data['latitude']),
+          _parseLatLang(data['longitude']),
+        ),
+        onTap: () {
+          launchMap(lat: data['latitude'], long: data['longitude']);
+        },
+        visible: true,
+      );
+// Add it to Set
+      markers.clear();
+      markers.add(resultMarker);
+      setState(() {});
       GoogleMapController controller = await _controller.future;
       CameraPosition _kLake = CameraPosition(
         bearing: 192.8334901395799,

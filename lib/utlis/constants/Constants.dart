@@ -21,8 +21,10 @@ String VIEW_HTML = 'viewhtml';
 String VIEW_POST = 'viewpost';
 String COUNTRY_WISE_INFO = 'countrywiseinfo';
 String VIEW_JOB = 'viewjob';
+String ALL_COMPANIES = 'allcompanies';
 String APPLY_JOB = 'applyjob';
 String MANPOWER_JOBS = 'manpowerjobs';
+String COMPANY_JOBS = 'companyjobs';
 String RADIO_PAGE = 'radiopage';
 String MANPOWER_SINGLE = 'manpowersingle';
 

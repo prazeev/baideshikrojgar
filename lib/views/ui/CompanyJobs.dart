@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:baideshikrojgar/controller/MainController.dart';
 import 'package:baideshikrojgar/utlis/constants/Constants.dart';
@@ -12,43 +14,39 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:nice_button/NiceButton.dart';
 
-class ManpowerJobs extends StatefulWidget {
+class CompanyJobs extends StatefulWidget {
   @override
-  _ManpowerJobsState createState() => _ManpowerJobsState();
+  _CompanyJobsState createState() => _CompanyJobsState();
 }
 
-class _ManpowerJobsState extends State<ManpowerJobs> {
+class _CompanyJobsState extends State<CompanyJobs> {
   MainController mainController = Get.find();
   GlobalKey _scaffoldKey;
   ScrollController scrollController = ScrollController();
   TextEditingController searchTextController = TextEditingController(text: "");
+  String reviewText = '';
   bool isGridView = false;
   List<dynamic> datas = [];
+  List<dynamic> reviews = [];
   Map details = Get.arguments;
-
   int selectedIndex = 0;
   double myRating = 0;
-  List<dynamic> reviews = [];
-  String reviewText = '';
-
   @override
   void initState() {
     setState(() {
       _scaffoldKey = GlobalKey<ScaffoldState>();
     });
     this.fetchData(first: true);
+    this.fetchDataReviews(first: true);
     super.initState();
 
     scrollController
       ..addListener(() {
         if (scrollController.position.pixels ==
             scrollController.position.maxScrollExtent) {
-          if (selectedIndex == 0) {
-            this.fetchData();
-          } else {
-            this.fetchDataReviews();
-          }
+          this.selectedIndex == 0 ? this.fetchData() : this.fetchDataReviews();
         }
       });
   }
@@ -58,10 +56,10 @@ class _ManpowerJobsState extends State<ManpowerJobs> {
           key: 'jobs_by_countries',
           first: first,
           path: first
-              ? 'jobs_by_manpower/' +
+              ? 'jobs_by_company/' +
                   details["id"].toString() +
                   '/' +
-                  this.searchTextController.text
+                  details['company']
               : '',
         );
     if (first) {
@@ -74,18 +72,11 @@ class _ManpowerJobsState extends State<ManpowerJobs> {
     });
   }
 
-  @override
-  void dispose() {
-    scrollController.dispose();
-    super.dispose();
-  }
-
   fetchDataReviews({bool first = false}) async {
     dynamic data = await this.mainController.fetchAllDatas(
           key: 'categories',
           first: first,
-          path:
-              first ? 'reviews/' + details["id"].toString() + '/manpower' : '',
+          path: first ? 'reviews/' + details["id"].toString() + '/company' : '',
         );
     if (first) {
       setState(() {
@@ -109,7 +100,7 @@ class _ManpowerJobsState extends State<ManpowerJobs> {
     await this.mainController.apiController.postDataFuture({
       "rating": myRating,
       "review": reviewText,
-    }, "/reviews/" + details["id"].toString() + "/manpower",
+    }, "/reviews/" + details["id"].toString() + "/company",
         message: "Posting rating...");
     setState(() {
       selectedIndex = 1;
@@ -118,10 +109,59 @@ class _ManpowerJobsState extends State<ManpowerJobs> {
   }
 
   @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.white,
+      appBar: AppBar(
+          title: TextFormatted(
+            text: details['company'],
+          ),
+          actions: <Widget>[
+            // Row(
+            //   children: <Widget>[
+            //     IconButton(
+            //       icon: !isGridView ? Icon(Icons.grid_on) : Icon(Icons.list),
+            //       onPressed: () {
+            //         setState(() {
+            //           isGridView = !isGridView;
+            //         });
+            //       },
+            //     ),
+            //   ],
+            // ),
+          ]),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: selectedIndex,
+        onTap: (int index) {
+          if (index == 0) {
+            this.fetchData(first: true);
+          } else {
+            this.fetchDataReviews(first: true);
+          }
+          setState(() {
+            selectedIndex = index;
+          });
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.work),
+            label: 'Jobs',
+            backgroundColor: Colors.pink,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.star),
+            label: 'Reviews',
+            backgroundColor: Colors.pink,
+          ),
+        ],
+      ),
       floatingActionButton:
           !mainController.user.email.contains('demo@sajhajobs.com')
               ? FloatingActionButton.extended(
@@ -210,70 +250,15 @@ class _ManpowerJobsState extends State<ManpowerJobs> {
                     children: [
                       Icon(Icons.star),
                       TextFormatted(
-                        text: "Rate this manpower",
+                        text: "Rate this company",
                       ),
                     ],
                   ),
                 )
               : null,
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: selectedIndex,
-        onTap: (int index) {
-          if (index == 0) {
-            this.fetchData(first: true);
-          } else {
-            this.fetchDataReviews(first: true);
-          }
-          setState(() {
-            selectedIndex = index;
-          });
-        },
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.work),
-            label: 'Jobs',
-            backgroundColor: Colors.pink,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.star),
-            label: 'Reviews',
-            backgroundColor: Colors.pink,
-          ),
-        ],
-      ),
-      appBar: AppBar(
-          title: TextFormatted(
-            text: details['manpower'],
-          ),
-          actions: <Widget>[
-            // Row(
-            //   children: <Widget>[
-            //     IconButton(
-            //       icon: !isGridView ? Icon(Icons.grid_on) : Icon(Icons.list),
-            //       onPressed: () {
-            //         setState(() {
-            //           isGridView = !isGridView;
-            //         });
-            //       },
-            //     ),
-            //   ],
-            // ),
-          ]),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
+      body: ListView(
+        controller: scrollController,
         children: [
-          selectedIndex == 0
-              ? CustomTextField(
-                  elevation: 1,
-                  hint: "Search jobs in: " + details['manpower'],
-                  radius: 0,
-                  textEditingController: searchTextController,
-                  onTextChange: (String text) {
-                    this.fetchData(first: true);
-                  },
-                )
-              : Container(),
           AppBannerAd(
             adSize: AdSize.fullBanner,
           ),
@@ -290,7 +275,7 @@ class _ManpowerJobsState extends State<ManpowerJobs> {
                       padding: const EdgeInsets.all(5.0),
                       child: this.selectedIndex == 0
                           ? SimplePrimaryTitle(
-                              title: "Active Jobs",
+                              title: "Jobs",
                             )
                           : SimplePrimaryTitle(
                               title: "Reviews",
@@ -306,45 +291,47 @@ class _ManpowerJobsState extends State<ManpowerJobs> {
                 ),
           datas.length == 0 && selectedIndex == 0
               ? Center(
-                  child: Text("No jobs for this manpower."),
+                  child: Text("No jobs for this company."),
                 )
               : SizedBox(
                   height: 1,
                 ),
           Expanded(
-              child: isGridView
-                  ? GridView.builder(
-                      itemCount: datas.length,
-                      controller: scrollController,
-                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 250.0,
-                        crossAxisSpacing: 7.0,
-                        mainAxisSpacing: 7.0,
-                        childAspectRatio: 1.2,
+            child: isGridView
+                ? GridView.builder(
+                    itemCount: datas.length,
+                    controller: scrollController,
+                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 250.0,
+                      crossAxisSpacing: 7.0,
+                      mainAxisSpacing: 7.0,
+                      childAspectRatio: 1.2,
+                    ),
+                    itemBuilder: (context, index) => _buildGrid(
+                      datas[index],
+                    ),
+                  )
+                : this.selectedIndex == 0
+                    ? Column(
+                        children: this
+                            .datas
+                            .map<Widget>(
+                              (e) => _buildList(
+                                e,
+                              ),
+                            )
+                            .toList(),
+                      )
+                    : Column(
+                        children: [
+                          BaideshikRojgarReviews(
+                              reviews: this.reviews,
+                              fetchFunction: (bool first) {
+                                this.fetchDataReviews(first: first);
+                              }),
+                        ],
                       ),
-                      itemBuilder: (context, index) => _buildGrid(
-                        datas[index],
-                      ),
-                    )
-                  : selectedIndex == 0
-                      ? ListView.separated(
-                          separatorBuilder: (context, index) {
-                            return Divider(
-                              height: 0.1,
-                              color: Colors.grey,
-                            );
-                          },
-                          itemBuilder: (context, index) => _buildList(
-                            datas[index],
-                          ),
-                          itemCount: datas.length,
-                          controller: scrollController,
-                        )
-                      : BaideshikRojgarReviews(
-                          reviews: this.reviews,
-                          fetchFunction: (bool first) {
-                            this.fetchDataReviews(first: first);
-                          })),
+          ),
         ],
       ),
     );

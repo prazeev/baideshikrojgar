@@ -3,6 +3,7 @@ import 'package:baideshikrojgar/utlis/constants/Constants.dart';
 import 'package:baideshikrojgar/utlis/global/textView.dart';
 import 'package:baideshikrojgar/views/fragements/jobTile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:nice_button/NiceButton.dart';
 
@@ -55,8 +56,8 @@ class HomeOtherMenuTile extends StatelessWidget {
 }
 
 class HomeManpowerEmbassy extends StatelessWidget {
-  final List manpowers, embassies;
-  HomeManpowerEmbassy({this.manpowers, this.embassies});
+  final List manpowers, embassies, companies;
+  HomeManpowerEmbassy({this.manpowers, this.embassies, this.companies});
   @override
   Widget build(BuildContext context) {
     List<Widget> allmanpowers = [];
@@ -70,6 +71,37 @@ class HomeManpowerEmbassy extends StatelessWidget {
         title: tile['title'],
         abstract: tile['abstract'],
         jobCount: tile['newjob'],
+        childWidget: IgnorePointer(
+          child: Row(
+            children: [
+              RatingBar.builder(
+                initialRating: double.parse(tile['average'].toString()),
+                minRating: 1,
+                direction: Axis.horizontal,
+                allowHalfRating: true,
+                itemCount: 5,
+                itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                itemBuilder: (context, _) => Icon(
+                  Icons.star,
+                  color: Theme.of(context).primaryColor,
+                ),
+                itemSize: 20,
+                glowRadius: 1,
+                onRatingUpdate: (rating) {
+                  print(rating);
+                },
+              ),
+              TextFormatted(
+                text: "(" + tile['average'].toString() + "/5) ",
+                textStyle: TextStyle(
+                  color: Colors.grey,
+                  fontStyle: FontStyle.italic,
+                  fontSize: 11,
+                ),
+              ),
+            ],
+          ),
+        ),
       );
     }).toList();
     List<Widget> allembassies = [];
@@ -85,9 +117,66 @@ class HomeManpowerEmbassy extends StatelessWidget {
         contact: tile['contact'],
       );
     }).toList();
+    List<Widget> allcompanies = [];
+    allcompanies = this.companies.map((tile) {
+      return JobTile(
+        divider: true,
+        height: 90,
+        jobId: tile['id'],
+        type: 'companiesjob',
+        html: tile['description'],
+        picture: tile['picture'],
+        title: tile['title'],
+        additionalheight: 60,
+        otherChildWidget: Column(
+          children: [
+            TextFormatted(
+              text: ((tile['average'] / 5) * 100).toString() +
+                  '% people are satisfied.',
+              textStyle: TextStyle(
+                color: Colors.grey,
+                fontSize: 10,
+                fontStyle: FontStyle.italic,
+              ),
+            )
+          ],
+        ),
+        childWidget: IgnorePointer(
+          child: Row(
+            children: [
+              RatingBar.builder(
+                initialRating: double.parse(tile['average'].toString()),
+                minRating: 1,
+                direction: Axis.horizontal,
+                allowHalfRating: true,
+                itemCount: 5,
+                itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                itemBuilder: (context, _) => Icon(
+                  Icons.star,
+                  color: Theme.of(context).primaryColor,
+                ),
+                itemSize: 20,
+                glowRadius: 1,
+                onRatingUpdate: (rating) {
+                  print(rating);
+                },
+              ),
+              TextFormatted(
+                text: "(" + tile['average'].toString() + "/5) ",
+                textStyle: TextStyle(
+                  color: Colors.grey,
+                  fontStyle: FontStyle.italic,
+                  fontSize: 11,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }).toList();
     return Container(
       child: DefaultTabController(
-        length: 2,
+        length: 3,
         child: Column(
           children: [
             Container(
@@ -100,6 +189,9 @@ class HomeManpowerEmbassy extends StatelessWidget {
                   ),
                   Tab(
                     text: "दुतावासहरु",
+                  ),
+                  Tab(
+                    text: "कम्पनीहरु",
                   ),
                 ],
               ),
@@ -142,6 +234,24 @@ class HomeManpowerEmbassy extends StatelessWidget {
                                 'title': 'Embassy List',
                                 'id': 5
                               });
+                            },
+                            text: "View All",
+                            fontSize: 12,
+                            background: Theme.of(context).primaryColor,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Container(
+                    color: Colors.white,
+                    child: Column(
+                      children: [
+                        ...allcompanies,
+                        Expanded(
+                          child: NiceButton(
+                            onPressed: () {
+                              Get.toNamed(ALL_COMPANIES);
                             },
                             text: "View All",
                             fontSize: 12,

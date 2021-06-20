@@ -1,4 +1,5 @@
 import 'package:baideshikrojgar/utlis/constants/Constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 const MONTHS = [
   'Jan',
@@ -92,6 +93,15 @@ getTimeFormatted(String time, {bool jsontype = false}) {
     return json;
   }
   return json['string'];
+}
+
+launchMap({String lat = "47.6", String long = "-122.3"}) async {
+  final url = 'https://www.google.com/maps/search/?api=1&query=$lat,$long';
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
 }
 
 getYesNoLabel(int i) {

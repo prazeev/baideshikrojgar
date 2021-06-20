@@ -55,7 +55,7 @@ class _SignInScreenState extends State<SignInScreen> {
   List loginSliderItems = [
     {
       "image": {
-        "data": "assets/images/log 1.png",
+        "data": "assets/images/s1.png",
         "type": "assets",
       },
       "text":
@@ -63,7 +63,7 @@ class _SignInScreenState extends State<SignInScreen> {
     },
     {
       "image": {
-        "data": "assets/images/log 2.png",
+        "data": "assets/images/s2.png",
         "type": "assets",
       },
       "text":
@@ -71,7 +71,7 @@ class _SignInScreenState extends State<SignInScreen> {
     },
     {
       "image": {
-        "data": "assets/images/log 3.png",
+        "data": "assets/images/s3.png",
         "type": "assets",
       },
       "text":
@@ -79,7 +79,7 @@ class _SignInScreenState extends State<SignInScreen> {
     },
     {
       "image": {
-        "data": "assets/images/log 4.png",
+        "data": "assets/images/s4.png",
         "type": "assets",
       },
       "text":
@@ -87,7 +87,15 @@ class _SignInScreenState extends State<SignInScreen> {
     },
     {
       "image": {
-        "data": "assets/images/log 5.png",
+        "data": "assets/images/s5.png",
+        "type": "assets",
+      },
+      "text":
+          "मोबाइल एपबाट वैदेशिक रोजगारको सम्पूर्ण जानकारी लिनुहोस्, गुनाशो गर्नुहोस्, समाचारहरु पढ्नुहोस् "
+    },
+    {
+      "image": {
+        "data": "assets/images/s6.png",
         "type": "assets",
       },
       "text":
@@ -120,69 +128,57 @@ class _SignInScreenState extends State<SignInScreen> {
     _pixelRatio = MediaQuery.of(context).devicePixelRatio;
     _large = ResponsiveWidget.isScreenLarge(_width, _pixelRatio);
     _medium = ResponsiveWidget.isScreenMedium(_width, _pixelRatio);
-    final double statusBarHeight = MediaQuery.of(context).padding.top;
-    return Material(
-      child: Container(
-        height: _height,
-        width: _width,
-        padding: EdgeInsets.only(bottom: 5),
-        decoration: BoxDecoration(
-          color: Colors.white,
-        ),
-        child: ClipRect(
-          child: SingleChildScrollView(
-            child: Container(
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Stack(
+          children: [
+            CarouselSlider.builder(
+              itemCount: loginSliderItems.length,
+              itemBuilder: (BuildContext context, int itemIndex, int i) {
+                dynamic item = loginSliderItems[itemIndex];
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    item['image']['type'] == 'assets'
+                        ? Image(
+                            image: AssetImage(item['image']['data']),
+                            // height: 150,
+                            height: MediaQuery.of(context).size.height,
+                            width: MediaQuery.of(context).size.width,
+                            fit: BoxFit.fitWidth,
+                          )
+                        : CachedNetworkImage(
+                            imageUrl: item['image']['data'],
+                            // height: 150,
+                            fit: BoxFit.fill,
+                          ),
+                  ],
+                );
+              },
+              options: CarouselOptions(
+                  height: MediaQuery.of(context).size.height,
+                  autoPlay: true,
+                  autoPlayInterval: Duration(seconds: 3),
+                  autoPlayAnimationDuration: Duration(milliseconds: 800),
+                  autoPlayCurve: Curves.fastOutSlowIn,
+                  scrollDirection: Axis.horizontal,
+                  viewportFraction: 1.0,
+                  enlargeCenterPage: false,
+                  onPageChanged: (index, reason) {
+                    setState(() {
+                      _current = index;
+                    });
+                  }),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  clipShape(),
-                  CarouselSlider.builder(
-                    itemCount: loginSliderItems.length,
-                    itemBuilder: (BuildContext context, int itemIndex, int i) {
-                      dynamic item = loginSliderItems[itemIndex];
-                      return Container(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            item['image']['type'] == 'assets'
-                                ? Image(
-                                    image: AssetImage(item['image']['data']),
-                                    height: 120,
-                                  )
-                                : CachedNetworkImage(
-                                    imageUrl: item['image']['data'],
-                                    height: 120,
-                                  ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            TextFormatted(
-                              text: item['text'],
-                              maxline: 100,
-                              textStyle: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 18,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                    options: CarouselOptions(
-                        height: 400,
-                        autoPlay: true,
-                        autoPlayInterval: Duration(seconds: 3),
-                        autoPlayAnimationDuration: Duration(milliseconds: 800),
-                        autoPlayCurve: Curves.fastOutSlowIn,
-                        scrollDirection: Axis.horizontal,
-                        viewportFraction: 1.0,
-                        enlargeCenterPage: false,
-                        onPageChanged: (index, reason) {
-                          setState(() {
-                            _current = index;
-                          });
-                        }),
-                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: loginSliderItems.map((item) {
@@ -256,7 +252,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 ],
               ),
             ),
-          ),
+          ],
         ),
       ),
     );
