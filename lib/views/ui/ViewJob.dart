@@ -9,10 +9,12 @@ import 'package:baideshikrojgar/views/fragements/BannerAds.dart';
 import 'package:baideshikrojgar/views/fragements/jobTile.dart';
 import 'package:baideshikrojgar/views/ui/LTWorkPermitSearch.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:share/share.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -114,7 +116,14 @@ class _ViewJobState extends State<ViewJob> {
                   Icons.share,
                   color: Colors.white,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Share.share(
+                    data['title_en'] +
+                        ' http://sajhajobs.com/jobs/' +
+                        data['id'].toString(),
+                    subject: "Wow, did you see that?",
+                  );
+                },
               ),
               data['is_subscribed']
                   ? IconButton(
@@ -270,17 +279,63 @@ class _ViewJobState extends State<ViewJob> {
             title: "Contact Us",
           ),
           JobTile(
-            picture: getFirstImage(data['manpower']['logo']),
-            // bigTitle: true,
             height: 100,
+            divider: true,
+            canCall: true,
             title: data['manpower']['name'],
+            fontSize: 14,
+            jobId: data['manpower']['id'],
+            type: 'manpowerjobs',
+            picture: getFirstImage(data['manpower']['logo']),
             location: data['manpower']['location'],
             contact: data['manpower']['contact'],
-            fontSize: 14,
-            type: 'manpowerjobs',
-            jobId: data['manpower']['id'],
-            canCall: true,
-          ),
+            otherChildWidget: Column(
+              children: [
+                TextFormatted(
+                  text: ((data['manpower']['average'] / 5) * 100).toString() +
+                      '% people are satisfied.',
+                  textStyle: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 10,
+                    fontStyle: FontStyle.italic,
+                  ),
+                )
+              ],
+            ),
+            additionalheight: 50,
+            childWidget: IgnorePointer(
+              child: Row(
+                children: [
+                  RatingBar.builder(
+                    initialRating:
+                        double.parse(data['manpower']['average'].toString()),
+                    minRating: 1,
+                    direction: Axis.horizontal,
+                    allowHalfRating: true,
+                    itemCount: 5,
+                    itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                    itemBuilder: (context, _) => Icon(
+                      Icons.star,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    itemSize: 20,
+                    glowRadius: 1,
+                    onRatingUpdate: (rating) {
+                      print(rating);
+                    },
+                  ),
+                  TextFormatted(
+                    text: "(" + data['manpower']['average'].toString() + "/5) ",
+                    textStyle: TextStyle(
+                      color: Colors.grey,
+                      fontStyle: FontStyle.italic,
+                      fontSize: 11,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
         ],
       ),
     );

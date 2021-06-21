@@ -134,6 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
       "picture": getFirstImage(item['logo']),
       "title": item['name'],
       "abstract": item['abstract'],
+      "contact": item['contact'],
       "newjob": item['active_jobs_count'],
       "id": item['id'],
       "average": item['average'],

@@ -69,8 +69,22 @@ class HomeManpowerEmbassy extends StatelessWidget {
         type: 'manpowerjobs',
         picture: tile['picture'],
         title: tile['title'],
-        abstract: tile['abstract'],
+        contact: tile['contact'],
         jobCount: tile['newjob'],
+        otherChildWidget: Column(
+          children: [
+            TextFormatted(
+              text: ((tile['average'] / 5) * 100).toString() +
+                  '% people are satisfied.',
+              textStyle: TextStyle(
+                color: Colors.grey,
+                fontSize: 10,
+                fontStyle: FontStyle.italic,
+              ),
+            )
+          ],
+        ),
+        additionalheight: 50,
         childWidget: IgnorePointer(
           child: Row(
             children: [

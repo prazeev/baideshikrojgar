@@ -2,7 +2,7 @@ name: baideshikrojgar
 description: A new Flutter project.
 
 
-version: 3.0.20+50
+version: 3.0.21+51
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -21,6 +21,7 @@ dependencies:
   flutter_slidable:
   flutter_html: ^1.0.0
   url_launcher: ^5.5.0
+  share:
   cached_network_image: ^2.2.0+1
   flutter_facebook_login: ^3.0.0
   carousel_slider: ^3.0.0

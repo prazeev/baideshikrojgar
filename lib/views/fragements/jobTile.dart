@@ -123,18 +123,18 @@ class _JobTileState extends State<JobTile> {
                             Icon(
                               Icons.directions,
                               color: Colors.white,
-                              size: 10,
+                              size: 24,
                             ),
                             SizedBox(
                               width: 3,
                             ),
-                            TextFormatted(
-                              text: "Go to direction",
-                              textStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 10,
-                              ),
-                            )
+                            // TextFormatted(
+                            //   text: "Go to direction",
+                            //   textStyle: TextStyle(
+                            //     color: Colors.white,
+                            //     fontSize: 10,
+                            //   ),
+                            // )
                           ],
                         ),
                       ),

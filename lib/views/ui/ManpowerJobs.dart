@@ -28,7 +28,7 @@ class _ManpowerJobsState extends State<ManpowerJobs> {
   Map details = Get.arguments;
 
   int selectedIndex = 0;
-  double myRating = 0;
+  double myRating = 1;
   List<dynamic> reviews = [];
   String reviewText = '';
 
@@ -340,11 +340,14 @@ class _ManpowerJobsState extends State<ManpowerJobs> {
                           itemCount: datas.length,
                           controller: scrollController,
                         )
-                      : BaideshikRojgarReviews(
-                          reviews: this.reviews,
-                          fetchFunction: (bool first) {
-                            this.fetchDataReviews(first: first);
-                          })),
+                      : SingleChildScrollView(
+                          controller: scrollController,
+                          child: BaideshikRojgarReviews(
+                              reviews: this.reviews,
+                              fetchFunction: (bool first) {
+                                this.fetchDataReviews(first: first);
+                              }),
+                        )),
         ],
       ),
     );

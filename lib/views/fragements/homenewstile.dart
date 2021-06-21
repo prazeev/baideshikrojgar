@@ -41,79 +41,87 @@ class HomeNewsTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (news['is_featured'] == '1') {
-      return Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all(
-            color: Theme.of(context).primaryColor,
+      return InkWell(
+        onTap: () {
+          Get.toNamed(VIEW_HTML, arguments: {
+            "title": news['title'],
+            "html": news['details'],
+          });
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(5),
+            border: Border.all(
+              color: Theme.of(context).primaryColor,
+            ),
           ),
-        ),
-        child: Column(
-          children: [
-            Container(
-              color: Colors.white,
-              height: JOB_TILE_HEIGHT,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    radius: JOB_TILE_HEIGHT / 2.5,
-                    backgroundImage: NetworkImage(
+          child: Column(
+            children: [
+              Container(
+                color: Colors.white,
+                height: JOB_TILE_HEIGHT,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      radius: JOB_TILE_HEIGHT / 2.5,
+                      backgroundImage: NetworkImage(
+                        'http://sajhasabal.com/uploads/contents/thumbs/small/' +
+                            news['featured_img'],
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.only(
+                          left: 5,
+                          right: 5,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextFormatted(
+                              text: news['title'],
+                              textStyle: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            TextNormal(
+                              text: news['date'],
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                height: JOB_TILE_HEIGHT * 3,
+                child: CachedNetworkImage(
+                  imageUrl:
                       'http://sajhasabal.com/uploads/contents/thumbs/small/' +
                           news['featured_img'],
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      padding: EdgeInsets.only(
-                        left: 5,
-                        right: 5,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TextFormatted(
-                            text: news['title'],
-                            textStyle: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          TextNormal(
-                            text: news['date'],
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-            Container(
-              width: double.infinity,
-              height: JOB_TILE_HEIGHT * 3,
-              child: CachedNetworkImage(
-                imageUrl:
-                    'http://sajhasabal.com/uploads/contents/thumbs/small/' +
-                        news['featured_img'],
-                fit: BoxFit.cover,
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.only(
+                  left: 5,
+                  right: 5,
+                  top: 10,
+                  bottom: 10,
+                ),
+                child: TextFormatted(
+                  text: news['meta_desc'],
+                  maxline: 5,
+                ),
               ),
-            ),
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.only(
-                left: 5,
-                right: 5,
-                top: 10,
-                bottom: 10,
-              ),
-              child: TextFormatted(
-                text: news['meta_desc'],
-                maxline: 5,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
     } else {
