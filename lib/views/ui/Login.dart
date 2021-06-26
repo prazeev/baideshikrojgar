@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -48,7 +49,10 @@ class _SignInScreenState extends State<SignInScreen> {
   bool _large;
   bool _medium;
   int _current = 0;
-  bool _loggingInFacebook = false, _loggingInGoogle = false, loggedIn = false;
+  bool _loggingInFacebook = false,
+      _loggingInGoogle = false,
+      _loggingInApple = false,
+      loggedIn = false;
   LoginController loginController = Get.find();
   GlobalKey<FormState> _key = GlobalKey();
   bool hasSeenIntro = false;
@@ -197,6 +201,28 @@ class _SignInScreenState extends State<SignInScreen> {
                       );
                     }).toList(),
                   ),
+                  Platform.isIOS
+                      ? _loggingInApple
+                          ? SignInButton(
+                              Buttons.Apple,
+                              text: "Signing in process...",
+                              onPressed: () async {},
+                            )
+                          : SignInButton(
+                              Buttons.Apple,
+                              text: "Sign in with apple",
+                              onPressed: () async {
+                                setState(() {
+                                  _loggingInApple = true;
+                                });
+                                loginController.setMedium('apple');
+                                await this.login();
+                                setState(() {
+                                  _loggingInApple = false;
+                                });
+                              },
+                            )
+                      : Container(),
                   _loggingInFacebook
                       ? SignInButton(
                           Buttons.Facebook,

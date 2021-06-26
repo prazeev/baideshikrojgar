@@ -29,14 +29,16 @@ import 'package:baideshikrojgar/views/ui/ValidCountries.dart';
 import 'package:baideshikrojgar/views/ui/ViewHtml.dart';
 import 'package:baideshikrojgar/views/ui/ViewJob.dart';
 import 'package:baideshikrojgar/views/ui/ViewPost.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 

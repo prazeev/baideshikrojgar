@@ -1,3 +1,5 @@
+import 'package:baideshikrojgar/models/SingleUser.dart';
+import 'package:baideshikrojgar/models/User.dart';
 import 'package:baideshikrojgar/utlis/constants/Constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -142,4 +144,37 @@ getMinimumQualification(qualify) {
     default:
       return "SLC Passed";
   }
+}
+
+SingleUser setSingleUserRawData(dynamic body) {
+  return SingleUser(
+    user: User(
+      token: body['access_token'],
+      email: body['user']['email'],
+      displayemail: body['user']['display_email'],
+      name: body['user']['name'],
+      picture: body['user']['main_image'],
+      bio: body['user']['profile']['career_objective'],
+      passportno: body['user']['profile']['passport_no'],
+      passportexpiry: body['user']['profile']['passport_expiry'],
+      birthdate: body['user']['profile']['dob'],
+      permanentaddress:
+          body['user']['profile']['permanent_address'] ?? "Not Specified",
+      temporaryaddress:
+          body['user']['profile']['temporary_address'] ?? "Not Specified",
+      mobilenumber: body['user']['profile']['mobile_number'] ?? "Not Specified",
+      height: body['user']['profile']['height'] ?? "Not Specified",
+      weight: body['user']['profile']['weight'] ?? "Not Specified",
+      religion: body['user']['profile']['religion'] ?? "Not Specified",
+      fathersname: body['user']['profile']['father_name'] ?? "Not Specified",
+      gender: body['user']['profile']['gender'] ?? "Not Specified",
+      nationality: body['user']['profile']['nationality'] ?? "Not Specified",
+      maritualstatus:
+          body['user']['profile']['marital_status'] ?? "Not Specified",
+      educations: body['user']['educations'],
+      trainings: body['user']['trainings'],
+      experiences: body['user']['experiences'],
+      languages: body['user']['languages'],
+    ),
+  );
 }

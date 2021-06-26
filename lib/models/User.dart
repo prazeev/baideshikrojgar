@@ -80,6 +80,14 @@ class User {
     this.updateUserProfileAttributeDatabase('temporary_address', address);
   }
 
+  setPassword(String pass) {
+    this.password = pass;
+  }
+
+  setId(String id) {
+    this.id = id;
+  }
+
   setDisplayEmail(String displayemail) {
     this.displayemail = displayemail;
     this.updateUserAttributeDatabase('display_email', displayemail);

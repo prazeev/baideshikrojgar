@@ -1,10 +1,15 @@
 import 'dart:convert';
 
+import 'package:apple_sign_in/apple_sign_in.dart';
+import 'package:baideshikrojgar/models/SingleUser.dart';
 import 'package:baideshikrojgar/models/User.dart';
 import 'package:baideshikrojgar/utlis/constants/Constants.dart';
+import 'package:baideshikrojgar/utlis/global/Helper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -19,7 +24,8 @@ class LoginController extends GetxController {
   GoogleSignInAccount googleUser;
   FacebookLogin facebookLogin = FacebookLogin();
   GoogleSignIn _googleSignIn = GoogleSignIn();
-  User user = User();
+  SingleUser user = SingleUser();
+  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   bool loggingIn = false, loggedIn = false;
   var setLoggedIn, setLoggingIn;
   LoginController({
@@ -29,11 +35,11 @@ class LoginController extends GetxController {
     this.setLoggingIn,
   });
   setEmail(String email) {
-    this.user.email = email;
+    this.user.user.email = email;
   }
 
   setPassword(String password) {
-    this.user.password = password;
+    this.user.user.password = password;
   }
 
   setMedium(String medium) {
@@ -41,11 +47,11 @@ class LoginController extends GetxController {
   }
 
   setId(String id) {
-    this.user.id = id;
+    this.user.user.id = id;
   }
 
   setName(String name) {
-    this.user.name = name;
+    this.user.user.name = name;
   }
 
   GoogleSignIn getGoogleSignIn() {
@@ -79,6 +85,12 @@ class LoginController extends GetxController {
       case 'google':
         await this.googleLogin();
         break;
+      case 'apple':
+        await this.appleLogin(scopes: [
+          Scope.email,
+          Scope.fullName,
+        ]);
+        break;
 
       case 'skiplogin':
         String deviceid = await _getId();
@@ -103,15 +115,14 @@ class LoginController extends GetxController {
         )..show();
     }
     var new_user = {
-      "email": this.user.email,
-      "password": this.user.password,
-      "password_confirmation": this.user.password,
-      "name": this.user.name,
+      "email": this.user.user.email,
+      "password": this.user.user.password,
+      "password_confirmation": this.user.user.password,
+      "name": this.user.user.name,
       "type": this.medium,
-      "user_id": this.user.id,
-      "picture": this.user.picture
+      "user_id": this.user.user.id,
+      "picture": this.user.user.picture
     };
-    print(new_user);
     var res = await http
         .post(BASE_URL + '/auth/signup', body: jsonEncode(new_user), headers: {
       "Content-type": "application/json",
@@ -124,8 +135,8 @@ class LoginController extends GetxController {
     } else {
       var res = await http.post(BASE_URL + '/auth/login',
           body: jsonEncode({
-            'email': this.user.email,
-            "password": this.user.password,
+            'email': this.user.user.email,
+            "password": this.user.user.password,
             "remember_me": true
           }),
           headers: {
@@ -145,37 +156,7 @@ class LoginController extends GetxController {
       } else {
         this.loggedIn = true;
         this.loggingIn = false;
-        this.user = User(
-          token: body['access_token'],
-          email: body['user']['email'],
-          displayemail: body['user']['display_email'],
-          name: body['user']['name'],
-          picture: body['user']['main_image'],
-          bio: body['user']['profile']['career_objective'],
-          passportno: body['user']['profile']['passport_no'],
-          passportexpiry: body['user']['profile']['passport_expiry'],
-          birthdate: body['user']['profile']['dob'],
-          permanentaddress:
-              body['user']['profile']['permanent_address'] ?? "Not Specified",
-          temporaryaddress:
-              body['user']['profile']['temporary_address'] ?? "Not Specified",
-          mobilenumber:
-              body['user']['profile']['mobile_number'] ?? "Not Specified",
-          height: body['user']['profile']['height'] ?? "Not Specified",
-          weight: body['user']['profile']['weight'] ?? "Not Specified",
-          religion: body['user']['profile']['religion'] ?? "Not Specified",
-          fathersname:
-              body['user']['profile']['father_name'] ?? "Not Specified",
-          gender: body['user']['profile']['gender'] ?? "Not Specified",
-          nationality:
-              body['user']['profile']['nationality'] ?? "Not Specified",
-          maritualstatus:
-              body['user']['profile']['marital_status'] ?? "Not Specified",
-          educations: body['user']['educations'],
-          trainings: body['user']['trainings'],
-          experiences: body['user']['experiences'],
-          languages: body['user']['languages'],
-        );
+        this.user = setSingleUserRawData(body);
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('user', jsonEncode(body));
         await prefs.setBool('isLoggedIn', true);
@@ -203,13 +184,11 @@ class LoginController extends GetxController {
         if (email == null) {
           email = '${profile['id']}.facebook@sajhajobs.com';
         }
-        this.user = User(
-          email: email,
-          picture: profile['picture']['data']['url'],
-          password: 'facebook_sajhajobs',
-          id: profile['id'],
-          name: profile['name'],
-        );
+        this.user.user.setEmail(email);
+        this.user.user.setPicture(profile['picture']['data']['url']);
+        this.user.user.setPassword('facebook_sajhajobs');
+        this.user.user.setId(profile['id']);
+        this.user.user.setName(profile['name']);
         break;
       case FacebookLoginStatus.cancelledByUser:
         this.loggedIn = false;
@@ -242,20 +221,11 @@ class LoginController extends GetxController {
   googleLogin() async {
     try {
       this.googleUser = await _googleSignIn.signIn();
-      this.user = User(
-        email: this.googleUser.email,
-        picture: this.googleUser.photoUrl,
-        password: 'gmail_sajhajobs',
-        id: this.googleUser.id,
-        name: this.googleUser.displayName,
-      );
-      // this.user = User(
-      //   email: 'prazeev@gmail.com',
-      //   picture: 'fsd',
-      //   password: 'gmail_sajhajobs',
-      //   id: '3232323232',
-      //   name: "Suman Aryal",
-      // );
+      this.user.user.setEmail(this.googleUser.email);
+      this.user.user.setPicture(this.googleUser.photoUrl);
+      this.user.user.setPassword('gmail_sajhajobs');
+      this.user.user.setId(this.googleUser.id);
+      this.user.user.setName(this.googleUser.displayName);
     } catch (error) {
       AwesomeDialog(
         context: Get.context,
@@ -264,6 +234,47 @@ class LoginController extends GetxController {
         title: 'Sorry, cannot login.',
         desc: error.toString(),
       )..show();
+    }
+  }
+
+  appleLogin({List<Scope> scopes = const []}) async {
+    final result = await AppleSignIn.performRequests(
+        [AppleIdRequest(requestedScopes: scopes)]);
+    switch (result.status) {
+      case AuthorizationStatus.authorized:
+        final appleIdCredential = result.credential;
+        final oAuthProvider = OAuthProvider('apple.com');
+        final credential = oAuthProvider.credential(
+          idToken: String.fromCharCodes(appleIdCredential.identityToken),
+          accessToken:
+              String.fromCharCodes(appleIdCredential.authorizationCode),
+        );
+        final authResult = await _firebaseAuth.signInWithCredential(credential);
+        final firebaseUser = authResult.user;
+        if (scopes.contains(Scope.email)) {
+          this.user.user.setEmail(appleIdCredential.email);
+          this.user.user.setPicture('https://picsum.photos/200');
+          this.user.user.setPassword('apple_sajhajobs');
+          this.user.user.setId(appleIdCredential.email);
+          final displayName =
+              '${appleIdCredential.fullName.givenName} ${appleIdCredential.fullName.familyName}';
+          await firebaseUser.updateProfile(displayName: displayName);
+          this.user.user.setName(displayName);
+        }
+        return firebaseUser;
+      case AuthorizationStatus.error:
+        throw PlatformException(
+          code: 'ERROR_AUTHORIZATION_DENIED',
+          message: result.error.toString(),
+        );
+
+      case AuthorizationStatus.cancelled:
+        throw PlatformException(
+          code: 'ERROR_ABORTED_BY_USER',
+          message: 'Sign in aborted by user',
+        );
+      default:
+        throw UnimplementedError();
     }
   }
 }

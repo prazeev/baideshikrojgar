@@ -31,6 +31,7 @@ dependencies:
   firebase_core:
   firebase_auth:
   google_sign_in: ^4.5.9
+  sign_in_with_apple:
   shimmer: ^1.1.2
   apple_sign_in:
   flutter_rating_bar:
