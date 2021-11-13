@@ -94,6 +94,7 @@ class _TrendingJobsState extends State<TrendingJobs> {
               this.fetchData(first: true);
             },
           ),
+          AppBannerAd(adSize: AdSize.largeBanner),
           Expanded(
             child: isGridView
                 ? GridView.builder(

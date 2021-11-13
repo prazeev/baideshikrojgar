@@ -62,10 +62,6 @@ class _HomeScreenState extends State<HomeScreen> {
     initConnectivity();
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
-    this.syncHome();
-    this.fetchHomeNews(
-      first: true,
-    );
   }
 
   refreshHandler() async {
@@ -195,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onRefresh: () => refreshHandler(),
         child: ListView(
           children: [
-            AppBannerAd(adSize: AdSize.fullBanner),
+            AppBannerAd(adSize: AdSize.largeBanner),
             Stack(
               children: [
                 Banners(),
@@ -219,6 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
               embassies: datas['embassies'],
               companies: datas['companies'],
             ),
+            AppBannerAd(adSize: AdSize.largeBanner),
             HomeLTWorkPermit(),
             HomeNews(
               datas: newsdatas,
@@ -248,12 +245,15 @@ class _HomeScreenState extends State<HomeScreen> {
       case ConnectivityResult.wifi:
       case ConnectivityResult.mobile:
         this.mainController.setIsInternetConnected(true);
+        this.refreshHandler();
         break;
       case ConnectivityResult.none:
         this.mainController.setIsInternetConnected(false);
+        this.refreshHandler();
         break;
       default:
         this.mainController.setIsInternetConnected(false);
+        this.refreshHandler();
         break;
     }
   }

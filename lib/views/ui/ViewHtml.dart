@@ -15,12 +15,19 @@ class ViewHtml extends StatefulWidget {
 class _ViewHtmlState extends State<ViewHtml> {
   MainController mainController = Get.find();
   String title = "View Article";
-  Map data = {"title": "", "html": ""};
+  Map data = {
+    "title": "",
+    "html": "",
+    "showAds": true,
+  };
   @override
   void initState() {
     super.initState();
     setState(() {
-      data = Get.arguments;
+      data = {
+        ...data,
+        ...Get.arguments,
+      };
     });
   }
 
@@ -34,9 +41,11 @@ class _ViewHtmlState extends State<ViewHtml> {
       ),
       body: ListView(
         children: [
-          AppBannerAd(
-            adSize: AdSize.largeBanner,
-          ),
+          data['showAds']
+              ? AppBannerAd(
+                  adSize: AdSize.largeBanner,
+                )
+              : Container(),
           Container(
             color: Colors.grey,
             width: double.infinity,

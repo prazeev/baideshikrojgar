@@ -78,10 +78,11 @@ class _JobTileState extends State<JobTile> {
           Get.toNamed(VIEW_HTML, arguments: {
             "title": this.widget.title,
             "html": this.widget.html,
+            "showAds":
+                this.widget.picture.contains('sajhasabal.com') ? false : true,
           });
         }
         if (this.widget.type == "job") {
-          print(this.widget.jobId);
           Get.toNamed(VIEW_JOB, arguments: this.widget.jobId);
         }
         if (this.widget.type == "radio") {

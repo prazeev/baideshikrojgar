@@ -46,6 +46,7 @@ class HomeNewsTile extends StatelessWidget {
           Get.toNamed(VIEW_HTML, arguments: {
             "title": news['title'],
             "html": news['details'],
+            "showAds": false,
           });
         },
         child: Container(

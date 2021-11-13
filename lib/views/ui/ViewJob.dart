@@ -178,10 +178,7 @@ class _ViewJobState extends State<ViewJob> {
                 color: Theme.of(context).primaryColor.withOpacity(0.08),
                 child: getOtherFacilities(),
               ),
-              Divider(
-                color: Theme.of(context).primaryColor.withOpacity(0.08),
-                height: 5,
-              ),
+              AppBannerAd(adSize: AdSize.largeBanner),
               Container(
                 color: Theme.of(context).primaryColor.withOpacity(0.08),
                 child: getOtherQualifications(),

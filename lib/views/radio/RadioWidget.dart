@@ -46,7 +46,7 @@ class RadioPlayingImage extends StatelessWidget {
                               width: 200.0,
                               height: 200.0,
                               decoration: BoxDecoration(
-                                shape: BoxShape.circle,
+                                shape: BoxShape.rectangle,
                                 image: DecorationImage(
                                   image: imageProvider,
                                   fit: BoxFit.fill,
@@ -727,7 +727,7 @@ class MediaLibrary {
       genre: "नेपाल र नेपालीको रेडियो",
       // duration: Duration(milliseconds: 5739820),
       artUri:
-          "https://sajhajobs.com/storage/photos/10333/Radio/60965b9827a7b.png",
+          "https://sajhajobs.com/storage/jobs/images/m1wTYKeDK0NrAfWp3oTSGMC07u4VJwsmLH7mKjxp.jpg",
     ),
     MediaItem(
       id: "https://radio-broadcast.ekantipur.com/stream",
@@ -736,7 +736,7 @@ class MediaLibrary {
       genre: "रेडियो राष्ट्रको",
       // duration: Duration(milliseconds: 5739820),
       artUri:
-          "https://sajhajobs.com/storage/photos/10333/Radio/60965b9fa9250.png",
+          "https://sajhajobs.com/storage/jobs/images/pr4h2GLSAPwyOdMrHliYT7z2alhHSNVCUYtEJhQH.jpg",
     ),
     MediaItem(
       id: "http://103.69.126.230:8000/stream",
@@ -745,7 +745,7 @@ class MediaLibrary {
       genre: "आधुनिक नेपालको समावेशी आवाज",
       // duration: Duration(milliseconds: 5739820),
       artUri:
-          "https://www.sajhajobs.com/storage/photos/10333/Radio/60965b9bbb547.png",
+          "https://sajhajobs.com/storage/jobs/images/JCvNTXVy1AI40zo2sCZpn9MyoDseRtq22gmL8FBH.jpg",
     ),
     MediaItem(
       id: "http://kalika-stream.softnep.com:7740/stream?type=http&nocache=7136",
@@ -754,7 +754,7 @@ class MediaLibrary {
       genre: "मध्ये नेपालको सर्वोत्कृष्ट रेडियो",
       // duration: Duration(milliseconds: 5739820),
       artUri:
-          "https://www.sajhajobs.com/storage/photos/10333/Radio/60965b99871d5.PNG",
+          "https://sajhajobs.com/storage/jobs/images/bLZuygU42aHt2I6kV9okhwUalYx3QjWlgp3uXNoK.jpg",
     ),
     MediaItem(
       id: "http://node-10.zeno.fm/h527zwd11uquv",
@@ -763,7 +763,7 @@ class MediaLibrary {
       genre: "90.0 MHz",
       // duration: Duration(milliseconds: 5739820),
       artUri:
-          "https://www.sajhajobs.com/storage/photos/10333/Radio/60965b9c9057a.png",
+          "https://sajhajobs.com/storage/jobs/images/PP1hzUENU5jfDR8bQYu6rzclBmxSJzn7CVjV3RrS.jpg",
     ),
     MediaItem(
       id: "https://usa15.fastcast4u.com/proxy/hitsfm912?mp=/1",
@@ -772,7 +772,7 @@ class MediaLibrary {
       genre: "91.2 MHz",
       // duration: Duration(milliseconds: 5739820),
       artUri:
-          "https://www.sajhajobs.com/storage/photos/10333/Radio/60965b9820f77.png",
+          "https://sajhajobs.com/storage/jobs/images/kbwoVqx25LrtFGF5Fc85ppt0rDkedgwqrOSGIsIO.jpg",
     ),
     MediaItem(
       id: "http://streaming.hamropatro.com:8631/;",
@@ -781,7 +781,7 @@ class MediaLibrary {
       genre: "97.9 MHz",
       // duration: Duration(milliseconds: 5739820),
       artUri:
-          "https://www.sajhajobs.com/storage/photos/10333/Radio/60965b99233a5.PNG",
+          "https://sajhajobs.com/storage/jobs/images/kbwoVqx25LrtFGF5Fc85ppt0rDkedgwqrOSGIsIO.jpg",
     ),
     MediaItem(
       id: "https://stream.zeno.fm/fvrx47wpg0quv",
@@ -790,7 +790,7 @@ class MediaLibrary {
       genre: "FM 106.3 MHz",
       // duration: Duration(milliseconds: 5739820),
       artUri:
-          "https://www.sajhajobs.com/storage/photos/10333/Radio/60965b99e5f0a.PNG",
+          "https://sajhajobs.com/storage/jobs/images/u74tErdVv7D1g1b7i4xS0ZdtKl8CtMdeXg5bvz1u.jpg",
     ),
     MediaItem(
       id: "http://streaming.softnep.net:8025/;stream.nsv&type=mp3",
@@ -799,7 +799,7 @@ class MediaLibrary {
       genre: "निष्पक्ष सक्रियताको अभ्यास",
       // duration: Duration(milliseconds: 5739820),
       artUri:
-          "https://www.sajhajobs.com/storage/photos/10333/Radio/60965b9c94be8.png",
+          "https://sajhajobs.com/storage/jobs/images/yBkwIvM3cluQPPoJgrguBIcvfQm6iXjesXUF5vMM.jpg",
     ),
     MediaItem(
       id: "http://streaming.softnep.net:8003/;",
@@ -808,7 +808,7 @@ class MediaLibrary {
       genre: "94.4 MHz",
       // duration: Duration(milliseconds: 5739820),
       artUri:
-          "https://www.sajhajobs.com/storage/photos/10333/Radio/60965b994c155.png",
+          "https://sajhajobs.com/storage/jobs/images/Lz58WSqNnjxGg63G0dqCQRLo2hs4f5zc1eN76obS.jpg",
     ),
     MediaItem(
       id: "http://streaming.hamropatro.com:8230/;",
@@ -817,7 +817,7 @@ class MediaLibrary {
       genre: "91.8 MHz",
       // duration: Duration(milliseconds: 5739820),
       artUri:
-          "https://www.sajhajobs.com/storage/photos/10333/Radio/60965b9b45241.png",
+          "https://sajhajobs.com/storage/jobs/images/yDex1eEshdWrLmwIs5GLEsmhwV32MET53E8Dciuz.jpg",
     ),
     MediaItem(
       id: "http://streaming.softnep.net:8091/;stream.nsv&type=mp3&volume=50",
@@ -826,7 +826,7 @@ class MediaLibrary {
       genre: "93.4 Mhz",
       // duration: Duration(milliseconds: 5739820),
       artUri:
-          "https://www.sajhajobs.com/storage/photos/10333/Radio/609ade01d119f.png",
+          "https://sajhajobs.com/storage/jobs/images/PiYgJ6fJNIyHfRi6w4msLQkadqlQwES2NYfwJ9LM.jpg",
     ),
   ];
 

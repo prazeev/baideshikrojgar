@@ -122,6 +122,7 @@ class _CategoryDataSajhasabalState extends State<CategoryDataSajhasabal> {
                       Get.toNamed(VIEW_HTML, arguments: {
                         "title": datas[i]['title'],
                         "html": datas[i]['details'],
+                        "showAds": false,
                       });
                     },
                     child: Container(

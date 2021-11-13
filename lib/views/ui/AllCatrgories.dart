@@ -94,7 +94,6 @@ class _AllCatrgoriesState extends State<AllCatrgories> {
           //     this.fetchData(first: true);
           //   },
           // ),
-          AppBannerAd(adSize: AdSize.fullBanner),
           Expanded(
             child: isGridView
                 ? GridView.builder(
@@ -119,6 +118,7 @@ class _AllCatrgoriesState extends State<AllCatrgories> {
                     },
                     itemBuilder: (context, index) => _buildList(
                       datas[index],
+                      index,
                     ),
                     itemCount: datas.length,
                     controller: scrollController,
@@ -129,14 +129,19 @@ class _AllCatrgoriesState extends State<AllCatrgories> {
     );
   }
 
-  _buildList(dynamic item) {
-    return JobTile(
-      jobId: item['slug'],
-      type: 'categories',
-      title: item['title_en'],
-      smallpicture: getFirstImage(item['images']),
-      abstract: item['abstract_en'],
-      jobCount: item['active_jobs_count'],
+  _buildList(dynamic item, int i) {
+    return Column(
+      children: [
+        i % 7 == 0 ? AppBannerAd(adSize: AdSize.banner) : Container(),
+        JobTile(
+          jobId: item['slug'],
+          type: 'categories',
+          title: item['title_en'],
+          smallpicture: getFirstImage(item['images']),
+          abstract: item['abstract_en'],
+          jobCount: item['active_jobs_count'],
+        ),
+      ],
     );
   }
 
