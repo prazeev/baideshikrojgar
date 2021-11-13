@@ -337,7 +337,7 @@ class _SignInScreenState extends State<SignInScreen> {
       Timer(Duration(seconds: 3), () {
         Get.offAllNamed(
           HOME_PAGE,
-          arguments: this.loginController.user,
+          arguments: this.loginController.user.user,
         );
       });
     }

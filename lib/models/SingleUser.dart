@@ -1,6 +1,9 @@
 import 'package:baideshikrojgar/models/User.dart';
 
 class SingleUser {
-  User user;
-  SingleUser({this.user});
+  User user = User();
+  SingleUser();
+  setUser(User user) {
+    this.user = user;
+  }
 }

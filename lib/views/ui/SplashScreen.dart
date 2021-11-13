@@ -27,6 +27,11 @@ class SplashScreenState extends State<SplashScreen>
   void navigationPage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    bool newapp = prefs.getBool('newapp') ?? true;
+    if (newapp) {
+      prefs.setBool('newapp', false);
+      Navigator.of(context).pushReplacementNamed(LOGIN_PAGE);
+    }
     if (isLoggedIn) {
       dynamic body = jsonDecode(prefs.getString('user'));
       User user = User(

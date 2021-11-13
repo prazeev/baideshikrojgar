@@ -147,8 +147,9 @@ getMinimumQualification(qualify) {
 }
 
 SingleUser setSingleUserRawData(dynamic body) {
-  return SingleUser(
-    user: User(
+  SingleUser singleUser = SingleUser();
+  singleUser.setUser(
+    User(
       token: body['access_token'],
       email: body['user']['email'],
       displayemail: body['user']['display_email'],
@@ -177,4 +178,5 @@ SingleUser setSingleUserRawData(dynamic body) {
       languages: body['user']['languages'],
     ),
   );
+  return singleUser;
 }

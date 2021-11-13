@@ -35,11 +35,11 @@ class LoginController extends GetxController {
     this.setLoggingIn,
   });
   setEmail(String email) {
-    this.user.user.email = email;
+    this.user.user.setEmail(email);
   }
 
   setPassword(String password) {
-    this.user.user.password = password;
+    this.user.user.setPassword(password);
   }
 
   setMedium(String medium) {
@@ -94,6 +94,9 @@ class LoginController extends GetxController {
 
       case 'skiplogin':
         String deviceid = await _getId();
+        if (deviceid.length == 0) {
+          deviceid = "AAAAAA";
+        }
         this.setEmail(deviceid + '-demo@sajhajobs.com');
         this.setPassword('facebook_sajhajobs');
         this.setId(deviceid);
@@ -143,7 +146,8 @@ class LoginController extends GetxController {
             "Content-type": "application/json",
             "Accept": "application/json",
           });
-      var body = json.decode(res.body);
+      var body = json.decode(res.body);    print(res.body);
+
       if (body.containsKey('errors')) {
         this.loggedIn = false;
         this.loggingIn = false;
