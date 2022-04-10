@@ -28,12 +28,12 @@ dependencies:
   flutter_countdown_timer: ^3.0.1
   multi_select_flutter: ^3.1.8
   flutter_signin_button: ^1.1.0
-  firebase_core:
-  firebase_auth:
+  firebase_core: ^0.7.0
+  firebase_auth: ^0.20.1
   google_sign_in: ^4.5.9
-  sign_in_with_apple:
+  sign_in_with_apple: ^2.5.4
   shimmer: ^1.1.2
-  apple_sign_in:
+  apple_sign_in: ^0.1.0
   flutter_rating_bar:
   connectivity: ^2.0.2
   textfield_tags: ^1.1.1
@@ -42,9 +42,9 @@ dependencies:
   flutter_tts: ^2.1.0
   device_info:
   permission_handler:
-  google_mobile_ads:
+  google_mobile_ads: ^0.11.0
   google_maps_flutter:
-  onesignal_flutter:
+  onesignal_flutter: ^2.6.3
 
 
 
